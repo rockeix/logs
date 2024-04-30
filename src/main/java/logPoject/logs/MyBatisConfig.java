@@ -12,7 +12,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
  
 @Configuration
-@MapperScan(basePackages= {"texas.sbq.travel.mappers"})
+@MapperScan(basePackages= {"logPoject.logs"})
 @EnableTransactionManagement
 public class MyBatisConfig {
     @Bean

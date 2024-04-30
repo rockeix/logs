@@ -14,7 +14,7 @@ public class LogsService implements LogsServiceInterface {
 
     @Override
     public void savePost(LogsDTO logsDTO) {
-        String sql = "INSERT INTO posts (post_name, post_content, user_nickname, user_pw) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO post (postName, postContent, userNickname, userPW) VALUES (?, ?, ?, ?)";
         
         jdbcTemplate.update(sql, logsDTO.getPostName(), logsDTO.getPostContent(), logsDTO.getUserNickname(), logsDTO.getUserPW());
     }

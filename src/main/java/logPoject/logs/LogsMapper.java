@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface LogsMapper {
     
-    @Insert("INSERT INTO post (post_name, post_content, user_nickname, user_pw) VALUES (#{postName}, #{postContent}, #{userNickname}, #{userPW})")
+    @Insert("insert into post(postName, postContent, userNickname, userPW) values (#{postName}, #{postContent}, #{userNickname}, #{userPW})")
     void insertPost(LogsDTO logsDTO);
 }
