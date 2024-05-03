@@ -17,20 +17,21 @@ public class LogsService implements LogsServiceInterface {
 
     @Override
     public void savePost(LogsDTO logsDTO) {
-        String sql = "INSERT INTO post (postName, postContent, userNickname, userPW) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO post (postName, postContent, userNickname, userPW, postIMG) VALUES (?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, logsDTO.getPostName(), logsDTO.getPostContent(), logsDTO.getUserNickname(),
-                logsDTO.getUserPW());
+                logsDTO.getUserPW(), logsDTO.getPostIMG());
     }
 
     @Override
     public List<LogsDTO> getAllPosts() {
-        String sql = "SELECT postName, postContent, userNickname FROM post";
+        String sql = "SELECT postName, postContent, userNickname, postIMG FROM post";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsDTO logsDTO = new LogsDTO();
             logsDTO.setPostName(rs.getString("postName"));
             logsDTO.setPostContent(rs.getString("postContent"));
             logsDTO.setUserNickname(rs.getString("userNickname"));
+            logsDTO.setPostIMG(rs.getString("postIMG"));
             return logsDTO;
         });
     }

@@ -13,9 +13,9 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface LogsMapper {
 
-    @Insert("insert into post(postName, postContent, userNickname, userPW) values (#{postName}, #{postContent}, #{userNickname}, #{userPW})")
+    @Insert("insert into post(postName, postContent, userNickname, userPW, postIMG) values (#{postName}, #{postContent}, #{userNickname}, #{userPW}, #{postIMG})")
     void insertPost(LogsDTO logsDTO);
 
-    @Select("SELECT postName, postContent, userNickname FROM post")
+    @Select("SELECT postName, postContent, userNickname, postIMG FROM post")
     List<LogsDTO> getAllPosts();
 }

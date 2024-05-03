@@ -10,6 +10,7 @@ public class LogsDTO {
     private String postContent;
     private String userNickname;
     private String userPW;
+    private String postIMG;
 
     public String getPostName() {
         return postName;
@@ -41,6 +42,14 @@ public class LogsDTO {
 
     public void setUserPW(String userPW) {
         this.userPW = userPW;
+    }
+
+    public String getPostIMG() {
+        return postIMG;
+    }
+
+    public void setPostIMG(String postIMG) {
+        this.postIMG = postIMG;
     }
 
 }
