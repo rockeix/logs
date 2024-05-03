@@ -23,6 +23,7 @@ String content = request.getParameter("content");
     <label for="userPW">패스워드:</label><br>
     <input type="password" id="userPW" name="userPW"><br>
     <input type="button" value="저장하기" onclick="submitForm()"><br>
+    <input type="button" value="게시판 이동" onclick= "index2()"><br>
 </form>
 
 <script>
@@ -46,6 +47,9 @@ function submitForm() {
             alert("저장에 실패했습니다: " + xhr.responseText);
         }
     });
+}
+function index2() {
+    window.location.href = "/logs/index2";
 }
 </script>
 </body>

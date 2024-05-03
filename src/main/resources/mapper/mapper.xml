@@ -4,4 +4,8 @@
   <insert id="insertPost" parameterType="logPoject.logs.DTO.LogsDTO">
     insert into post(postName, postContent, userNickname, userPW) values (#{postName}, #{postContent}, #{userNickname}, #{userPW})
   </insert>
+   <select id="getAllPosts" resultType="logPoject.logs.DTO.LogsDTO">
+    SELECT postName, postContent, userNickname
+    FROM post
+  </select>
 </mapper>

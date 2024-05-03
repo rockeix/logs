@@ -1,6 +1,9 @@
 package logPoject.logs.Service;
 
 import logPoject.logs.DTO.LogsDTO;
+
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,20 @@ public class LogsService implements LogsServiceInterface {
     @Override
     public void savePost(LogsDTO logsDTO) {
         String sql = "INSERT INTO post (postName, postContent, userNickname, userPW) VALUES (?, ?, ?, ?)";
-        
-        jdbcTemplate.update(sql, logsDTO.getPostName(), logsDTO.getPostContent(), logsDTO.getUserNickname(), logsDTO.getUserPW());
+
+        jdbcTemplate.update(sql, logsDTO.getPostName(), logsDTO.getPostContent(), logsDTO.getUserNickname(),
+                logsDTO.getUserPW());
+    }
+
+    @Override
+    public List<LogsDTO> getAllPosts() {
+        String sql = "SELECT postName, postContent, userNickname FROM post";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            LogsDTO logsDTO = new LogsDTO();
+            logsDTO.setPostName(rs.getString("postName"));
+            logsDTO.setPostContent(rs.getString("postContent"));
+            logsDTO.setUserNickname(rs.getString("userNickname"));
+            return logsDTO;
+        });
     }
 }
