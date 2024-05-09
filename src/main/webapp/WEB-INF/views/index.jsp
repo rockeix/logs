@@ -12,6 +12,8 @@ String content = request.getParameter("content");
     <!-- jQuery 추가 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+    <%-- 이미지 업로드 어댑터 --%>
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
 </head>
 <body>
 <form id="logForm">
@@ -30,7 +32,11 @@ String content = request.getParameter("content");
 <script>
 // CKEditor 5 초기화
 ClassicEditor
-    .create(document.querySelector('#postContent')) 
+    .create(document.querySelector('#postContent'), {
+                ckfinder: {
+                uploadUrl : '/logs/upload'
+            }
+    })
     .then(createdEditor => {
         console.log('CKEditor 5 initialized:', createdEditor);
         editor = createdEditor; // 에디터를 전역 변수에 할당

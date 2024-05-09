@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
@@ -33,6 +34,20 @@ public class LogsController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error saving post");
         }
+    }
+
+    @PostMapping("/upload")
+    public ModelAndView upload(MultipartHttpServletRequest request) {
+        ModelAndView mav = new ModelAndView("jsonView");
+
+         // PhotoUtil의 인스턴스 생성
+        PhotoUtil photoUtil = new PhotoUtil();
+        // 인스턴스를 통해 ckUpload 메소드 호출
+         String uploadPath = photoUtil.ckUpload(request);
+        
+        mav.addObject("uploaded", true);
+        mav.addObject("url", uploadPath);
+        return mav;
     }
 
     @GetMapping("/all")
