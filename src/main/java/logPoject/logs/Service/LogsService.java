@@ -7,12 +7,25 @@ import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class LogsService implements LogsServiceInterface {
     private final JdbcTemplate jdbcTemplate;
 
     public LogsService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public List<LogsDTO> getNos(Long postNo) {
+        String sql = "SELECT postName, postContent, userNickname, postIMG FROM post WHERE postNo = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            LogsDTO logsDTO = new LogsDTO();
+            logsDTO.setPostName(rs.getString("postName"));
+            logsDTO.setPostContent(rs.getString("postContent"));
+            logsDTO.setUserNickname(rs.getString("userNickname"));
+            logsDTO.setPostIMG(rs.getString("postIMG"));
+            return logsDTO;
+        }, postNo);
     }
 
     @Override
@@ -37,18 +50,17 @@ public class LogsService implements LogsServiceInterface {
         });
     }
 
-    @Override
-    public List<LogsDTO> getNos() {
-        String sql = "SELECT postNo, postName, postContent, userNickname, postIMG FROM post";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            LogsDTO logsDTO = new LogsDTO();
-            logsDTO.setPostNo(rs.getString("postNo"));
-            logsDTO.setPostName(rs.getString("postName"));
-            logsDTO.setPostContent(rs.getString("postContent"));
-            logsDTO.setUserNickname(rs.getString("userNickname"));
-            logsDTO.setPostIMG(rs.getString("postIMG"));
-            return logsDTO;
-        });
-    }
+    // @Override
+    // public List<LogsDTO> getNos() {
+    //     String sql = "SELECT postName, postContent, userNickname, postIMG FROM post where postNo = ?";
+    //     return jdbcTemplate.query(sql, (rs, rowNum) -> {
+    //         LogsDTO logsDTO = new LogsDTO();
+    //         logsDTO.setPostName(rs.getString("postName"));
+    //         logsDTO.setPostContent(rs.getString("postContent"));
+    //         logsDTO.setUserNickname(rs.getString("userNickname"));
+    //         logsDTO.setPostIMG(rs.getString("postIMG"));
+    //         return logsDTO;
+    //     });
+    // }
 
 }

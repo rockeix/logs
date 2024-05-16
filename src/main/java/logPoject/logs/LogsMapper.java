@@ -19,6 +19,6 @@ public interface LogsMapper {
     @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post")
     List<LogsDTO> getAllPosts();
 
-    @Select("SELECT * FROM post where postNo = #{postNo}")
+    @Select("SELECT postName, postContent, userNickname, postIMG FROM post where postNo = #{postNo}")
     LogsDTO getNos(int postNo);
 }

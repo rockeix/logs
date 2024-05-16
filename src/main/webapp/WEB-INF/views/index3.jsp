@@ -9,9 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>
-    <h2 id="postName"></h2>
-    <p id="postContent"></p>
+<div id="postBoard">
 </div>
 <input type="button" value="게시판 이동" onclick= "index2()"><br>
 <script>
@@ -29,17 +27,25 @@ function loadPostContent() {
                 type: "GET",
                 url: "/logs/Nos",
                 data: { postNo: postNo },
+                contentType: "application/json",
                 success: function(response) {
-                    $("#postName").text(response.postName); // 포스트 제목을 화면에 출력
-                    $("#postContent").text(response.postContent); // 포스트 내용을 화면에 출력
+
+                response.forEach(function(post) {
+                // 각 포스트를 게시판 형식으로 출력
+                var postHTML = '<div class="postNo" data-id="' + post.postNo + '">';
+                postHTML += '<h2 >' + post.postName + '</h2>';
+                postHTML += '<p>작성자: ' + post.userNickname + '</p>';
+                postHTML += '<p>' + post.postContent + '</p>';
+                postHTML += '</div>';
+                
+                $("#postBoard").append(postHTML);
+            });
                 },
                 error: function(xhr, status, error) {
                     alert("에러 입니다: " + error);
         }
     });
 }
-
-
 function getParameterByName(name, url) { // URL에서 특정 이름(name)의 쿼리 파라미터(parameter) 값을 추출하는 함수
     if (!url) url = window.location.href; // URL이 주어지지 않았을 경우, 기본값으로 현재 창의 URL을 사용
     name = name.replace(/[\[\]]/g, "\\$&"); // 추출하려는 쿼리 파라미터의 이름에 대괄호([])가 포함되어 있을 수 있으므로 이스케이프 처리

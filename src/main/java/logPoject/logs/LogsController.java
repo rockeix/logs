@@ -57,8 +57,8 @@ public class LogsController {
     }
 
     @GetMapping("/Nos")
-    public ResponseEntity<List<LogsDTO>> getNos() {
-        List<LogsDTO> Nos = logsService.getNos();
+    public ResponseEntity<List<LogsDTO>> getNos(@RequestParam Long postNo) {
+        List<LogsDTO> Nos = logsService.getNos(postNo);
         return ResponseEntity.ok().body(Nos);
     }
 
