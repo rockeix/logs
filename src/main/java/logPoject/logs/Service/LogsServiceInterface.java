@@ -9,6 +9,4 @@ public interface LogsServiceInterface {
     void savePost(LogsDTO logsDTO);
 
     List<LogsDTO> getAllPosts();
-
-    List<LogsDTO> getNos();
 }

@@ -6,20 +6,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 public class LogsDTO {
 
-    private String postNo;
     private String postName;
     private String postContent;
     private String userNickname;
     private String userPW;
     private String postIMG;
-
-    public String getPostNo() {
-        return postNo;
-    }
-
-    public void setPostNo(String postNo) {
-        this.postNo = postNo;
-    }
 
     public String getPostName() {
         return postName;
@@ -60,4 +51,5 @@ public class LogsDTO {
     public void setPostIMG(String postIMG) {
         this.postIMG = postIMG;
     }
+
 }

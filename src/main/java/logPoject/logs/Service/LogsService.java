@@ -25,10 +25,9 @@ public class LogsService implements LogsServiceInterface {
 
     @Override
     public List<LogsDTO> getAllPosts() {
-        String sql = "SELECT postNo, postName, postContent, userNickname, postIMG FROM post";
+        String sql = "SELECT postName, postContent, userNickname, postIMG FROM post";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsDTO logsDTO = new LogsDTO();
-            logsDTO.setPostNo(rs.getString("postNo"));
             logsDTO.setPostName(rs.getString("postName"));
             logsDTO.setPostContent(rs.getString("postContent"));
             logsDTO.setUserNickname(rs.getString("userNickname"));
@@ -36,19 +35,4 @@ public class LogsService implements LogsServiceInterface {
             return logsDTO;
         });
     }
-
-    @Override
-    public List<LogsDTO> getNos() {
-        String sql = "SELECT postNo, postName, postContent, userNickname, postIMG FROM post";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            LogsDTO logsDTO = new LogsDTO();
-            logsDTO.setPostNo(rs.getString("postNo"));
-            logsDTO.setPostName(rs.getString("postName"));
-            logsDTO.setPostContent(rs.getString("postContent"));
-            logsDTO.setUserNickname(rs.getString("userNickname"));
-            logsDTO.setPostIMG(rs.getString("postIMG"));
-            return logsDTO;
-        });
-    }
-
 }

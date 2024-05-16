@@ -31,19 +31,13 @@ function loadPostData() {
             $("#postBoard").empty(); // 기존 내용 삭제
             response.forEach(function(post) {
                 // 각 포스트를 게시판 형식으로 출력
-                var postHTML = '<div class="post" data-postNo="' + post.postNo + '">';
-                postHTML += '<h2 class="postName">'+ post.postName + post.postNo + '</h2>';
+                var postHTML = '<div class="post">';
+                postHTML += '<h2>' + post.postName + '</h2>';
                 postHTML += '<p>작성자: ' + post.userNickname + '</p>';
                 postHTML += '<p>' + post.postContent + '</p>';
                 postHTML += '</div>';
                 
                 $("#postBoard").append(postHTML);
-            });
-             // 포스트 클릭했을 때의 이벤트 핸들러 추가
-            $(".postName").click(function() {
-                var postNo = $(this).data("postNo"); // 클릭한 포스트의 넘버 가져오기
-                // 해당 포스트의 내용을 보여주는 index3 페이지로 이동
-                window.location.href = "/logs/index3?postNo=" + encodeURIComponent(postNo);
             });
         },
         error: function(xhr, status, error) {

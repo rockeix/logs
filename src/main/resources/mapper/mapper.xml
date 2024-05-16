@@ -5,12 +5,7 @@
     insert into post(postName, postContent, userNickname, userPW, postIMG) values (#{postName}, #{postContent}, #{userNickname}, #{userPW}, #{postIMG})
   </insert>
    <select id="getAllPosts" resultType="logPoject.logs.DTO.LogsDTO">
-    SELECT postNo, postName, postContent, userNickname, postIMG,
+    SELECT postName, postContent, userNickname, postIMG,
     FROM post
-  </select>
-  <select id="getNos" resultType="logPoject.logs.DTO.LogsDTO">
-    SELECT *
-    FROM  post 
-    where postNo = #{postNo}
   </select>
 </mapper>

@@ -40,11 +40,11 @@ public class LogsController {
     public ModelAndView upload(MultipartHttpServletRequest request) {
         ModelAndView mav = new ModelAndView("jsonView");
 
-        // PhotoUtil의 인스턴스 생성
+         // PhotoUtil의 인스턴스 생성
         PhotoUtil photoUtil = new PhotoUtil();
         // 인스턴스를 통해 ckUpload 메소드 호출
-        String uploadPath = photoUtil.ckUpload(request);
-
+         String uploadPath = photoUtil.ckUpload(request);
+        
         mav.addObject("uploaded", true);
         mav.addObject("url", uploadPath);
         return mav;
@@ -54,18 +54,5 @@ public class LogsController {
     public ResponseEntity<List<LogsDTO>> getAllPosts() {
         List<LogsDTO> allPosts = logsService.getAllPosts();
         return ResponseEntity.ok().body(allPosts);
-    }
-
-    @GetMapping("/Nos")
-    public ResponseEntity<List<LogsDTO>> getNos() {
-        List<LogsDTO> Nos = logsService.getNos();
-        return ResponseEntity.ok().body(Nos);
-    }
-
-    @GetMapping("/index3")
-    public ModelAndView index3(@RequestParam("postNo") String postNo) {
-        ModelAndView modelAndView = new ModelAndView("index3");
-        modelAndView.addObject("postNo", postNo); // 포스트 번호를 index3 페이지로 전달
-        return modelAndView;
     }
 }
