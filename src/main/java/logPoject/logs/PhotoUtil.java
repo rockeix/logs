@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 public class PhotoUtil {
-        public String ckUpload(MultipartHttpServletRequest request) {
+    public String ckUpload(MultipartHttpServletRequest request) {
 
         MultipartFile uploadFile = request.getFile("upload");
 
@@ -40,9 +40,9 @@ public class PhotoUtil {
     private String getFileName(MultipartFile uploadFile) {
         String originalFileName = uploadFile.getOriginalFilename();
         if (originalFileName == null || originalFileName.isEmpty()) {
-            return UUID.randomUUID().toString() + ".txt";
+            return UUID.randomUUID().toString() + ".txt"; // 확장자 지정
         }
-        String ext = originalFileName.substring(originalFileName.lastIndexOf("."));
+        String ext = originalFileName.substring(originalFileName.lastIndexOf("."));// 확장자 확인
         return UUID.randomUUID() + ext;
     }
 
@@ -59,5 +59,5 @@ public class PhotoUtil {
         }
         return realPath;
     }
-    
+
 }
