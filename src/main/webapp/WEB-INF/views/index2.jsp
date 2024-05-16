@@ -41,7 +41,7 @@ function loadPostData() {
             });
                 $(".postNo").click(function() {
                 var postNo = $(this).data("id"); // 클릭한 포스트의 넘버 가져오기
-                window.location.href = "/logs/index3?postNo=" + postNo;
+                window.location.href = "/logs/index3?postNo=" + encodeURIComponent(postNo);
             });
         },
         error: function(xhr, status, error) {
