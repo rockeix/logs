@@ -5,10 +5,12 @@ import logPoject.logs.Service.LogsService;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/logs")
@@ -22,8 +24,8 @@ public class LogsController {
 
     @RequestMapping("/index2")
     public ModelAndView index2() {
-        ModelAndView modelAndView = new ModelAndView("index2"); // ModelAndView 객체를 생성하고 "index2"를 설정
-        return modelAndView; // "index2.jsp"로 이동하도록 ModelAndView 객체 반환
+        ModelAndView modelAndView = new ModelAndView("index2");
+        return modelAndView;
     }
 
     @PostMapping("/save")
@@ -36,19 +38,50 @@ public class LogsController {
         }
     }
 
+    @PostMapping("/temp")
+    public ModelAndView tempUpload(MultipartHttpServletRequest request) {
+        ModelAndView mav = new ModelAndView("jsonView");
+
+        PhotoUtil photoUtil = new PhotoUtil();
+        String tempPath = photoUtil.tempUpload(request);
+
+        mav.addObject("uploaded", true);
+        mav.addObject("url", tempPath);
+        return mav;
+    }
+
     @PostMapping("/upload")
     public ModelAndView upload(MultipartHttpServletRequest request) {
         ModelAndView mav = new ModelAndView("jsonView");
 
-        // PhotoUtil의 인스턴스 생성
         PhotoUtil photoUtil = new PhotoUtil();
-        // 인스턴스를 통해 ckUpload 메소드 호출
-        String uploadPath = photoUtil.ckUpload(request);
+        String tempPath = photoUtil.tempUpload(request); // 임시 파일 업로드
 
-        mav.addObject("uploaded", true);
-        mav.addObject("url", uploadPath);
+        try {
+            photoUtil.moveFileToUploadDir(tempPath); // 임시 파일을 업로드 디렉토리로 이동
+            
+            String uploadPath = tempPath.replace("/temp/", "/upload/");
+            mav.addObject("uploaded", true);
+            mav.addObject("url", uploadPath);
+        } catch (IOException e) {
+            mav.addObject("uploaded", false);
+            mav.addObject("error", "File upload failed");
+        }
+
         return mav;
     }
+
+    @PostMapping("/cleanup")
+    public ResponseEntity<String> cleanupTempFolder() {
+    PhotoUtil photoUtil = new PhotoUtil();
+    try {
+        photoUtil.deleteTempFolder();
+        return ResponseEntity.ok("임시 폴더를 성공적으로 정리했습니다.");
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("임시 폴더 정리 중 오류가 발생했습니다.");
+    }
+}
 
     @GetMapping("/all")
     public ResponseEntity<List<LogsDTO>> getAllPosts() {
@@ -65,7 +98,7 @@ public class LogsController {
     @GetMapping("/index3")
     public ModelAndView index3(@RequestParam("postNo") String postNo) {
         ModelAndView modelAndView = new ModelAndView("index3");
-        modelAndView.addObject("postNo", postNo); // 포스트 번호를 index3 페이지로 전달
+        modelAndView.addObject("postNo", postNo);
         return modelAndView;
     }
 }

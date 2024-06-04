@@ -34,7 +34,7 @@ String content = request.getParameter("content");
 ClassicEditor
     .create(document.querySelector('#postContent'), {
                 ckfinder: {
-                uploadUrl : '/logs/upload'
+                uploadUrl : '/logs/temp'
             }
     })
     .then(createdEditor => {
@@ -45,14 +45,37 @@ ClassicEditor
         console.error('CKEditor 5 initialization failed:', error);
     });
 
-function submitForm() {
+    window.addEventListener("beforeunload", function(event) {
+    navigator.sendBeacon("/logs/cleanup");
+    return '';
+    });
+
+    function submitForm() {
     // 에디터에서 가져온 내용을 변수에 저장
     var editorData = editor.getData();
+
+    // DOMParser를 사용하여 HTML 문자열을 파싱
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(editorData, 'text/html');
+
+    // 이미지 태그를 모두 찾아서 src 속성을 변경
+    var images = doc.querySelectorAll('img');
+    images.forEach(function(img) {
+        // 절대 경로에서 베이스 URL을 제거
+        var src = img.src.replace('http://localhost:8080', '');
+
+        // /temp/를 /upload/로 변경
+        img.src = src.replace('/temp/', '/upload/');
+    });
+
+    // 수정된 HTML을 다시 문자열로 변환
+    var updatedEditorData = doc.body.innerHTML;
+
 
     // 서브밋 폼 데이터 설정
     var formData = {
         "postName": $("#postName").val(),
-        "postContent": editorData, // 에디터에서 가져온 내용 사용
+        "postContent": updatedEditorData, // 에디터에서 가져온 내용 사용
         "userNickname": $("#userNickname").val(),
         "userPW": $("#userPW").val()
     };
