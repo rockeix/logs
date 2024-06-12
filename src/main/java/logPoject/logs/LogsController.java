@@ -5,6 +5,7 @@ import logPoject.logs.Service.LogsService;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +13,13 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 
+
 @RestController
 @RequestMapping("/logs")
 public class LogsController {
-
+    @Autowired
+    public PhotoUtil photoUtil;
+    @Autowired
     private final LogsService logsService;
 
     public LogsController(LogsService logsService) {
@@ -38,11 +42,21 @@ public class LogsController {
         }
     }
 
+    @PostMapping("/moveFiles")
+    public ResponseEntity<String> moveFiles(@RequestBody List<String> fileNames) {
+        for (String fileName : fileNames) {
+            boolean result = photoUtil.moveFile(fileName);
+            if (!result) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 이동에 실패했습니다: " + fileName);
+            }
+        }
+        return ResponseEntity.ok("모든 파일이 성공적으로 이동되었습니다.");
+    }
+
     @PostMapping("/temp")
     public ModelAndView tempUpload(MultipartHttpServletRequest request) {
         ModelAndView mav = new ModelAndView("jsonView");
 
-        PhotoUtil photoUtil = new PhotoUtil();
         String tempPath = photoUtil.tempUpload(request);
 
         mav.addObject("uploaded", true);
@@ -50,30 +64,8 @@ public class LogsController {
         return mav;
     }
 
-    @PostMapping("/upload")
-    public ModelAndView upload(MultipartHttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("jsonView");
-
-        PhotoUtil photoUtil = new PhotoUtil();
-        String tempPath = photoUtil.tempUpload(request); // 임시 파일 업로드
-
-        try {
-            photoUtil.moveFileToUploadDir(tempPath); // 임시 파일을 업로드 디렉토리로 이동
-            
-            String uploadPath = tempPath.replace("/temp/", "/upload/");
-            mav.addObject("uploaded", true);
-            mav.addObject("url", uploadPath);
-        } catch (IOException e) {
-            mav.addObject("uploaded", false);
-            mav.addObject("error", "File upload failed");
-        }
-
-        return mav;
-    }
-
     @PostMapping("/cleanup")
     public ResponseEntity<String> cleanupTempFolder() {
-    PhotoUtil photoUtil = new PhotoUtil();
     try {
         photoUtil.deleteTempFolder();
         return ResponseEntity.ok("임시 폴더를 성공적으로 정리했습니다.");

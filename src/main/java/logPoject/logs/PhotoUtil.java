@@ -5,50 +5,55 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+@Component
 public class PhotoUtil {
 
-    private final String UPLOAD_DIR = "/uploads/";
-    private final String TEMP_DIR = "/temp/";
-    private final String TEMP_DIRDelete = "src/main/webapp/temp";
+    @Value("${file.temp-dir:/temp/}")
+    private String tempDir;
 
-    // public String upload(MultipartHttpServletRequest request) {
-    //     MultipartFile uploadFile = request.getFile("upload");
+    @Value("${file.temp-dir-delete:src/main/webapp/temp}")
+    private String tempDirDelete;
 
-    //     String fileName = getFileName(uploadFile);
-    //     String uploadPath = getPath(request, UPLOAD_DIR) + fileName;
-    //     uploadFile(uploadPath, uploadFile);
+    @Value("${file.uploadDirMove:src/main/webapp/upload/}")
+    private String uploadDirMove;
 
-    //     return request.getContextPath() + UPLOAD_DIR + fileName;
-    // }
+    @Value("${file.tempDirMove:src/main/webapp/temp/}")
+    private String tempDirMove;
 
     public String tempUpload(MultipartHttpServletRequest request) {
         MultipartFile uploadFile = request.getFile("upload");
 
         String fileName = getFileName(uploadFile);
-        String tempPath = getPath(request, TEMP_DIR) + fileName;
+        String tempPath = getPath(request, tempDir) + fileName;
         uploadFile(tempPath, uploadFile);
 
         // 웹 접근 가능한 경로 반환
-        return request.getContextPath() + TEMP_DIR + fileName;
+        return request.getContextPath() + tempDir + fileName;
     }
 
-    public void moveFileToUploadDir(String tempFilePath) throws IOException {
-        Path tempPath = Paths.get(tempFilePath);
-        Path uploadPath = Paths.get(tempFilePath.replace(TEMP_DIR, UPLOAD_DIR));
-
-        Files.createDirectories(uploadPath.getParent());
-        Files.move(tempPath, uploadPath);
+    public boolean moveFile(String fileName) {
+        try {
+            Files.move(Paths.get(tempDirMove + fileName),
+                       Paths.get(uploadDirMove + fileName),
+                       StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     public void deleteTempFolder() throws IOException {
 
-        Path tempFolder = Paths.get(TEMP_DIRDelete);
+        Path tempFolder = Paths.get(tempDirDelete);
         if (Files.exists(tempFolder)) {
             Files.walk(tempFolder)
                 .sorted(Comparator.reverseOrder())
@@ -59,11 +64,6 @@ public class PhotoUtil {
                 });
         }
     }
-
-    // public void deleteTempFile(String tempFilePath) throws IOException {
-    //     Path tempPath = Paths.get(tempFilePath);
-    //     Files.deleteIfExists(tempPath);
-    // }
 
     private void uploadFile(String savePath, MultipartFile uploadFile) {
         try {
