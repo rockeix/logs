@@ -13,4 +13,8 @@
     FROM  post 
     where postNo = #{postNo}
   </select>
+  <select id="getClist" resultType="logPoject.logs.DTO.LogsDTO">
+    SELECT comentNickname, comentContent, comentCreateDate
+    FROM coment
+  </select>
 </mapper>

@@ -9,15 +9,51 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div id="postBoard">
-</div>
-<input type="button" value="게시판 이동" onclick= "index2()"><br>
+<div id="postBoard"></div>
+
+<div id="comentlist"></div>
+
+<form id="comentporm">
+    <div id="coment-write">
+        <input type="Nickname" id="comentNickname" name="comentNickname" placeholder="닉네임"><br>
+        <input type="password" id="comentPW" name="comentPW" placeholder="비밀번호"><br>
+        <textarea id="comentContent" name="comentContent"></textarea>
+        <button type="button" class="comentbtn">등록</button>
+        
+    </div>
+    <input type="button" value="게시판 이동" onclick="index2()"><br>
+</form>
+
+
+
 <script>
 $(document).ready(function() {
     // 페이지 로드시 자동으로 포스트 내용 불러오기
     loadPostContent();
+    loadCommentlist();
 });
 
+function loadCommentlist() {
+    $.ajax({
+        type:"GET",
+        url:"/logs/Clist",
+        contentType:"application/json",
+        success:function(response){
+            response.forEach(function(coment){
+                var postHTML = ''
+                postHTML += '<h2>' + coment.comentNickname + '</h2>';
+                postHTML += '<p>' + coment.comentContent + '</p>';
+                postHTML += '<p>' + coment.comentCreateDate + '</p>';
+                postHTML += '</div>';
+                
+                $("#comentlist").append(postHTML);
+            });
+        },
+                error: function(xhr, status, error) {
+                    alert("에러 입니다: " + error);
+        }
+    });
+}
 function loadPostContent() {
     // URL에서 포스트 넘버 가져오기
     var postNo = decodeURIComponent(getParameterByName('postNo'));
