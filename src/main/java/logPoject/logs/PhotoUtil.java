@@ -5,35 +5,75 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Comparator;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+@Component
 public class PhotoUtil {
-    public String ckUpload(MultipartHttpServletRequest request) {
 
+    @Value("${file.temp-dir:/temp/}")
+    private String tempDir;
+
+    @Value("${file.temp-dir-delete:src/main/webapp/temp}")
+    private String tempDirDelete;
+
+    @Value("${file.uploadDirMove:src/main/webapp/upload/}")
+    private String uploadDirMove;
+
+    @Value("${file.tempDirMove:src/main/webapp/temp/}")
+    private String tempDirMove;
+
+    public String tempUpload(MultipartHttpServletRequest request) {
         MultipartFile uploadFile = request.getFile("upload");
 
         String fileName = getFileName(uploadFile);
+        String tempPath = getPath(request, tempDir) + fileName;
+        uploadFile(tempPath, uploadFile);
 
-        String realPath = getPath(request);
+        // 웹 접근 가능한 경로 반환
+        return request.getContextPath() + tempDir + fileName;
+    }
 
-        String savePath = realPath + fileName;
+    public boolean moveFile(String fileName) {
+        try {
+            Files.move(Paths.get(tempDirMove + fileName),
+                       Paths.get(uploadDirMove + fileName),
+                       StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
 
-        String uploadPath = request.getContextPath() + "/upload/" + fileName;
+    public void deleteTempFolder() throws IOException {
 
-        uploadFile(savePath, uploadFile);
-
-        return uploadPath;
+        Path tempFolder = Paths.get(tempDirDelete);
+        if (Files.exists(tempFolder)) {
+            Files.walk(tempFolder)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(file -> {
+                    System.out.println("Deleting: " + file.getAbsolutePath());
+                    file.delete();
+                });
+        }
     }
 
     private void uploadFile(String savePath, MultipartFile uploadFile) {
-        File file = new File(savePath);
         try {
+            File file = new File(savePath);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
             uploadFile.transferTo(file);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload the file", e);
+            e.printStackTrace();
         }
     }
 
@@ -42,22 +82,20 @@ public class PhotoUtil {
         if (originalFileName == null || originalFileName.isEmpty()) {
             return UUID.randomUUID().toString() + ".txt"; // 확장자 지정
         }
-        String ext = originalFileName.substring(originalFileName.lastIndexOf("."));// 확장자 확인
+        String ext = originalFileName.substring(originalFileName.lastIndexOf(".")); // 확장자 확인
         return UUID.randomUUID() + ext;
     }
 
-    private String getPath(MultipartHttpServletRequest request) {
-        // 실제 파일 저장 경로
-        String realPath = request.getServletContext().getRealPath("/upload/");
-        Path directoryPath = Paths.get(realPath);
-        if (!Files.exists(directoryPath)) {
-            try {
-                Files.createDirectories(directoryPath);
-            } catch (IOException e) {
-                throw new RuntimeException("Could not create upload directory", e);
-            }
+    private String getPath(MultipartHttpServletRequest request, String directory) {
+        String rootPath = request.getServletContext().getRealPath("/");
+        if (!directory.startsWith("/")) {
+            directory = "/" + directory;
         }
-        return realPath;
+        String path = rootPath + directory;
+        File dir = new File(path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return path;
     }
-
 }

@@ -34,7 +34,7 @@ String content = request.getParameter("content");
 ClassicEditor
     .create(document.querySelector('#postContent'), {
                 ckfinder: {
-                uploadUrl : '/logs/upload'
+                uploadUrl : '/logs/temp'
             }
     })
     .then(createdEditor => {
@@ -45,31 +45,72 @@ ClassicEditor
         console.error('CKEditor 5 initialization failed:', error);
     });
 
-function submitForm() {
-    // 에디터에서 가져온 내용을 변수에 저장
-    var editorData = editor.getData();
+    window.addEventListener("beforeunload", function(event) {
+    navigator.sendBeacon("/logs/cleanup");
+    return '';
+    });
 
-    // 서브밋 폼 데이터 설정
+function submitForm() {
+    var editorData = editor.getData();
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(editorData, 'text/html');
+    var images = doc.querySelectorAll('img');
+
+    images.forEach(function(img) {
+        var src = img.src.replace('http://localhost:8080', '');
+        img.src = src.replace('/temp/', '/upload/');
+    });
+
+    var updatedEditorData = doc.body.innerHTML;
+
     var formData = {
         "postName": $("#postName").val(),
-        "postContent": editorData, // 에디터에서 가져온 내용 사용
+        "postContent": updatedEditorData,
         "userNickname": $("#userNickname").val(),
         "userPW": $("#userPW").val()
     };
 
+    var fileNames = getFileNames(images);
+
+    console.log("Form Data:", formData);
+    console.log("File Names:", fileNames);
+
     $.ajax({
         type: "POST",
-        url: "/logs/save",
+        url: "/logs/moveFiles",
         contentType: "application/json",
-        data: JSON.stringify(formData),
+        data: JSON.stringify(fileNames),
         success: function(response) {
-            alert("저장되었습니다.");
+            $.ajax({
+                type: "POST",
+                url: "/logs/save",
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    alert("저장성공.");
+                },
+                error: function(xhr, status, error) {
+                    alert("저장에 실패했습니다: " + xhr.responseText);
+                }
+            });
         },
         error: function(xhr, status, error) {
-            alert("저장에 실패했습니다: " + xhr.responseText);
+            console.error("파일 이동에 실패했습니다: ", xhr.responseText);
+            alert("파일 이동에 실패했습니다: " + xhr.responseText);
         }
     });
 }
+
+function getFileNames(images) {
+    var fileNames = [];
+    images.forEach(function(img) {
+        var src = img.src;
+        var fileName = src.substring(src.lastIndexOf('/') + 1);
+        fileNames.push(fileName);
+    });
+    return fileNames;
+}
+
 function index2() {
     window.location.href = "/logs/index2";
 }
