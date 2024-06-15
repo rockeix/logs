@@ -11,4 +11,6 @@ public interface LogsServiceInterface {
     List<LogsDTO> getAllPosts();
 
     List<LogsDTO> getNos(Long postNo);
+
+    List<LogsDTO> getClist();
 }

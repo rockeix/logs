@@ -18,7 +18,11 @@
 $(document).ready(function() {
     // 페이지 로드시 자동으로 데이터 불러오기
     loadPostData();
-    index2urlchange();
+
+     // 브라우저 뒤로가기/앞으로가기 이벤트 처리
+    window.addEventListener('popstate', function() {
+        loadPostData();
+        });
 });
 
 function loadPostData() {
@@ -43,6 +47,8 @@ function loadPostData() {
                 var postNo = $(this).data("id"); // 클릭한 포스트의 넘버 가져오기
                 window.location.href = "/logs/index3?postNo=" + encodeURIComponent(postNo);
             });
+            // URL을 변경합니다.
+            index2urlchange();
         },
         error: function(xhr, status, error) {
             alert("에러 입니다: " + error);
