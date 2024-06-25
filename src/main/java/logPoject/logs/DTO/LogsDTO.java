@@ -19,6 +19,9 @@ public class LogsDTO {
     private String comentCreateDate;
     private String comentNickname;
     private String comentPW;
+    private String comentNo;
+    private String cocomentNo;
+    private String comentDepth;
 
     // 포스트
     public String getPostNo() {
@@ -100,5 +103,29 @@ public class LogsDTO {
 
     public void setcomentPW(String comentPW) {
         this.comentPW = comentPW;
+    }
+
+    public String comentNo() {
+        return comentNo;
+    }
+
+    public void comentNo(String comentNo) {
+        this.comentNo = comentNo;
+    }
+
+    public String cocomentNo() {
+        return cocomentNo;
+    }
+
+    public void cocomentNo(String cocomentNo) {
+        this.cocomentNo = cocomentNo;
+    }
+
+    public String comentDepth() {
+        return comentDepth;
+    }
+
+    public void comentDepth(String comentDepth) {
+        this.comentDepth = comentDepth;
     }
 }

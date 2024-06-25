@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/logs")
@@ -66,14 +67,14 @@ public class LogsController {
 
     @PostMapping("/cleanup")
     public ResponseEntity<String> cleanupTempFolder() {
-    try {
-        photoUtil.deleteTempFolder();
-        return ResponseEntity.ok("임시 폴더를 성공적으로 정리했습니다.");
-    } catch (IOException e) {
-        e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("임시 폴더 정리 중 오류가 발생했습니다.");
+        try {
+            photoUtil.deleteTempFolder();
+            return ResponseEntity.ok("임시 폴더를 성공적으로 정리했습니다.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("임시 폴더 정리 중 오류가 발생했습니다.");
+        }
     }
-}
 
     @GetMapping("/all")
     public ResponseEntity<List<LogsDTO>> getAllPosts() {
@@ -85,6 +86,12 @@ public class LogsController {
     public ResponseEntity<List<LogsDTO>> getNos(@RequestParam Long postNo) {
         List<LogsDTO> Nos = logsService.getNos(postNo);
         return ResponseEntity.ok().body(Nos);
+    }
+
+    @GetMapping("/Clist")
+    ResponseEntity<List<LogsDTO>> getClist() {
+        List<LogsDTO> Clist = logsService.getClist();
+        return ResponseEntity.ok().body(Clist);
     }
 
     @GetMapping("/index3")

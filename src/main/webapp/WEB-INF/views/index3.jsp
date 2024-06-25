@@ -19,7 +19,7 @@
         <input type="password" id="comentPW" name="comentPW" placeholder="비밀번호"><br>
         <textarea id="comentContent" name="comentContent"></textarea>
         <button type="button" class="comentbtn">등록</button>
-        
+
     </div>
     <input type="button" value="게시판 이동" onclick="index2()"><br>
 </form>
@@ -33,27 +33,6 @@ $(document).ready(function() {
     loadCommentlist();
 });
 
-function loadCommentlist() {
-    $.ajax({
-        type:"GET",
-        url:"/logs/Clist",
-        contentType:"application/json",
-        success:function(response){
-            response.forEach(function(coment){
-                var postHTML = ''
-                postHTML += '<h2>' + coment.comentNickname + '</h2>';
-                postHTML += '<p>' + coment.comentContent + '</p>';
-                postHTML += '<p>' + coment.comentCreateDate + '</p>';
-                postHTML += '</div>';
-                
-                $("#comentlist").append(postHTML);
-            });
-        },
-                error: function(xhr, status, error) {
-                    alert("에러 입니다: " + error);
-        }
-    });
-}
 function loadPostContent() {
     // URL에서 포스트 넘버 가져오기
     var postNo = decodeURIComponent(getParameterByName('postNo'));
@@ -91,6 +70,30 @@ function getParameterByName(name, url) { // URL에서 특정 이름(name)의 쿼
     if (!results[2]) return ''; // 쿼리 파라미터의 값이 없을 경우, 빈 문자열 반환
     return decodeURIComponent(results[2].replace(/\+/g, " ")); // 쿼리 파라미터의 값을 디코딩하여 반환
 }
+
+function loadCommentlist() {
+    $.ajax({
+        type:"GET",
+        url:"/logs/Clist",
+        contentType:"application/json",
+        success:function(response){
+            response.forEach(function(coment){
+                var postHTML = ''
+                postHTML += '<h2>' + coment.comentNickname + '</h2>';
+                postHTML += '<p>' + coment.comentContent + '</p>';
+                postHTML += '<p>' + coment.comentCreateDate + '</p>';
+                postHTML += '</div>';
+                
+                $("#comentlist").append(postHTML);
+            });
+        },
+                error: function(xhr, status, error) {
+                    alert("에러 입니다: " + error);
+        }
+    });
+}
+
+
 
 function index2() {
     window.location.href = "/logs/index2";
