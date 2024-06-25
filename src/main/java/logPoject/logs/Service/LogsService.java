@@ -51,7 +51,7 @@ public class LogsService implements LogsServiceInterface {
     }
 
     public List<LogsDTO> getClist() {
-        String sql = "SELECT comentNickname, comentContent, comentCreateDate FROM coment";
+        String sql = "SELECT  comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment WHERE postNo = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsDTO logsDTO = new LogsDTO();
             logsDTO.setcomentNickname(rs.getString("comentNickname"));
