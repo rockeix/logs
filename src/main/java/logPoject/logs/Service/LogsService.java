@@ -1,6 +1,7 @@
 package logPoject.logs.Service;
 
 import logPoject.logs.DTO.LogsDTO;
+import logPoject.logs.DTO.LogsComentDTO;
 
 import java.util.List;
 
@@ -50,19 +51,19 @@ public class LogsService implements LogsServiceInterface {
         });
     }
 
-    public List<LogsDTO> getClist() {
+    public List<LogsComentDTO> getClist() {
         String sql = "SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            LogsDTO logsDTO = new LogsDTO();
-            logsDTO.setPostNo(rs.getString("postNo"));
-            logsDTO.setcomentContent(rs.getString("comentContent"));
-            logsDTO.setcomentCreateDate(rs.getString("comentCreateDate"));
-            logsDTO.setcomentNickname(rs.getString("comentNickname"));
-            logsDTO.setcomentPW(rs.getString("comentPW"));
-            logsDTO.setcomentNo(rs.getString("comentNo"));
-            logsDTO.setcocomentNo(rs.getString("cocomentNo"));
-            logsDTO.setcomentDepth(rs.getString("comentDepth"));
-            return logsDTO;
+            LogsComentDTO logsComentDTO = new LogsComentDTO();
+            logsComentDTO.setPostNo(rs.getString("postNo"));
+            logsComentDTO.setcomentContent(rs.getString("comentContent"));
+            logsComentDTO.setcomentCreateDate(rs.getString("comentCreateDate"));
+            logsComentDTO.setcomentNickname(rs.getString("comentNickname"));
+            logsComentDTO.setcomentPW(rs.getString("comentPW"));
+            logsComentDTO.setcomentNo(rs.getString("comentNo"));
+            logsComentDTO.setcocomentNo(rs.getString("cocomentNo"));
+            logsComentDTO.setcomentDepth(rs.getString("comentDepth"));
+            return logsComentDTO;
         });
     }
 

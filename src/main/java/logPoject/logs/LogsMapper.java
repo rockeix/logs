@@ -1,5 +1,6 @@
 package logPoject.logs;
 
+import logPoject.logs.DTO.LogsComentDTO;
 import logPoject.logs.DTO.LogsDTO;
 
 import java.util.List;
@@ -23,6 +24,6 @@ public interface LogsMapper {
     LogsDTO getNos(int postNo);
 
     @Select("SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment")
-    List<LogsDTO> getClist();
+    List<LogsComentDTO> getClist();
 
 }

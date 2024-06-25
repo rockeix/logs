@@ -13,7 +13,7 @@
     FROM  post 
     where postNo = #{postNo}
   </select>
-  <select id="getClist" resultType="logPoject.logs.DTO.LogsDTO">
+  <select id="getClist" resultType="logPoject.logs.DTO.LogsComentDTO">
     SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth
     FROM coment
   </select>

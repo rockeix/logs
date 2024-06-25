@@ -1,6 +1,7 @@
 package logPoject.logs;
 
 import logPoject.logs.DTO.LogsDTO;
+import logPoject.logs.DTO.LogsComentDTO;
 import logPoject.logs.Service.LogsService;
 
 import java.util.List;
@@ -89,8 +90,8 @@ public class LogsController {
     }
 
     @GetMapping("/Clist")
-    ResponseEntity<List<LogsDTO>> getClist() {
-        List<LogsDTO> Clist = logsService.getClist();
+    ResponseEntity<List<LogsComentDTO>> getClist() {
+        List<LogsComentDTO> Clist = logsService.getClist();
         return ResponseEntity.ok().body(Clist);
     }
 

@@ -3,6 +3,7 @@ package logPoject.logs.Service;
 import java.util.List;
 
 import logPoject.logs.DTO.LogsDTO;
+import logPoject.logs.DTO.LogsComentDTO;
 
 public interface LogsServiceInterface {
 
@@ -12,5 +13,5 @@ public interface LogsServiceInterface {
 
     List<LogsDTO> getNos(Long postNo);
 
-    List<LogsDTO> getClist();
+    List<LogsComentDTO> getClist();
 }
