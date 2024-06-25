@@ -51,12 +51,17 @@ public class LogsService implements LogsServiceInterface {
     }
 
     public List<LogsDTO> getClist() {
-        String sql = "SELECT  comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment WHERE postNo = ?";
+        String sql = "SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsDTO logsDTO = new LogsDTO();
-            logsDTO.setcomentNickname(rs.getString("comentNickname"));
+            logsDTO.setPostNo(rs.getString("postNo"));
             logsDTO.setcomentContent(rs.getString("comentContent"));
             logsDTO.setcomentCreateDate(rs.getString("comentCreateDate"));
+            logsDTO.setcomentNickname(rs.getString("comentNickname"));
+            logsDTO.setcomentPW(rs.getString("comentPW"));
+            logsDTO.setcomentNo(rs.getString("comentNo"));
+            logsDTO.setcocomentNo(rs.getString("cocomentNo"));
+            logsDTO.setcomentDepth(rs.getString("comentDepth"));
             return logsDTO;
         });
     }

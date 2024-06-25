@@ -22,7 +22,7 @@ public interface LogsMapper {
     @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post where postNo = #{postNo}")
     LogsDTO getNos(int postNo);
 
-    @Select("SELECT comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM comnet WHERE postNo = #{postNo}")
+    @Select("SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment")
     List<LogsDTO> getClist();
 
 }

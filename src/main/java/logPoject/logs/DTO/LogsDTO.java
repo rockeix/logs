@@ -105,27 +105,27 @@ public class LogsDTO {
         this.comentPW = comentPW;
     }
 
-    public String comentNo() {
+    public String getcomentNo() {
         return comentNo;
     }
 
-    public void comentNo(String comentNo) {
+    public void setcomentNo(String comentNo) {
         this.comentNo = comentNo;
     }
 
-    public String cocomentNo() {
+    public String getcocomentNo() {
         return cocomentNo;
     }
 
-    public void cocomentNo(String cocomentNo) {
+    public void setcocomentNo(String cocomentNo) {
         this.cocomentNo = cocomentNo;
     }
 
-    public String comentDepth() {
+    public String getcomentDepth() {
         return comentDepth;
     }
 
-    public void comentDepth(String comentDepth) {
+    public void setcomentDepth(String comentDepth) {
         this.comentDepth = comentDepth;
     }
 }
