@@ -16,5 +16,6 @@
   <select id="getClist" resultType="logPoject.logs.DTO.LogsComentDTO">
     SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth
     FROM coment
+    where postNo = #{postNo}
   </select>
 </mapper>

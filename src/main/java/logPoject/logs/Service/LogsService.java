@@ -51,8 +51,8 @@ public class LogsService implements LogsServiceInterface {
         });
     }
 
-    public List<LogsComentDTO> getClist() {
-        String sql = "SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment";
+    public List<LogsComentDTO> getClist(Long postNo) {
+        String sql = "SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment WHERE postNo = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsComentDTO logsComentDTO = new LogsComentDTO();
             logsComentDTO.setPostNo(rs.getString("postNo"));
@@ -64,7 +64,7 @@ public class LogsService implements LogsServiceInterface {
             logsComentDTO.setcocomentNo(rs.getString("cocomentNo"));
             logsComentDTO.setcomentDepth(rs.getString("comentDepth"));
             return logsComentDTO;
-        });
+        }, postNo);
     }
 
     // @Override

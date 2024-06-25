@@ -90,8 +90,8 @@ public class LogsController {
     }
 
     @GetMapping("/Clist")
-    ResponseEntity<List<LogsComentDTO>> getClist() {
-        List<LogsComentDTO> Clist = logsService.getClist();
+    ResponseEntity<List<LogsComentDTO>> getClist(@RequestParam Long postNo) {
+        List<LogsComentDTO> Clist = logsService.getClist(postNo);
         return ResponseEntity.ok().body(Clist);
     }
 

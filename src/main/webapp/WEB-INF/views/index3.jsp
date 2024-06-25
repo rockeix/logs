@@ -72,13 +72,17 @@ function getParameterByName(name, url) { // URL에서 특정 이름(name)의 쿼
 }
 
 function loadCommentlist() {
+    // URL에서 포스트 넘버 가져오기
+    var postNo = decodeURIComponent(getParameterByName('postNo'));
+    
     $.ajax({
         type:"GET",
         url:"/logs/Clist",
+        data: { postNo: postNo },
         contentType:"application/json",
         success:function(response){
             response.forEach(function(coment){
-                var postHTML = ''
+                var postHTML = '<div class="postNo" data-id="' + post.postNo + '">';
                 postHTML += '<h2>' + coment.comentNickname + '</h2>';
                 postHTML += '<p>' + coment.comentContent + '</p>';
                 postHTML += '<p>' + coment.comentCreateDate + '</p>';
