@@ -81,14 +81,15 @@ function loadCommentlist() {
         data: { postNo: postNo },
         contentType:"application/json",
         success:function(response){
+            $("#comentlist").empty(); // 기존 댓글 삭제
             response.forEach(function(coment){
-                var postHTML = '<div class="postNo" data-id="' + post.postNo + '">';
-                postHTML += '<h2>' + coment.comentNickname + '</h2>';
-                postHTML += '<p>' + coment.comentContent + '</p>';
-                postHTML += '<p>' + coment.comentCreateDate + '</p>';
-                postHTML += '</div>';
+                var comentHTML = '<div class="postNo" data-id="' + coment.postNo + '">';
+                comentHTML += '<h2>' + coment.comentNickname + '</h2>';
+                comentHTML += '<p>' + coment.comentContent + '</p>';
+                comentHTML += '<p>' + coment.comentCreateDate + '</p>';
+                comentHTML += '</div>';
                 
-                $("#comentlist").append(postHTML);
+                $("#comentlist").append(comentHTML);
             });
         },
                 error: function(xhr, status, error) {
