@@ -73,11 +73,18 @@ function getParameterByName(name, url) { // URL에서 특정 이름(name)의 쿼
 function submitComment() {
     // URL에서 포스트 넘버 가져오기
     var postNo = decodeURIComponent(getParameterByName('postNo'));
+    var comentContent = $("#comentContent").val().trim();
+    var comentNickname = $("#comentNickname").val().trim();
+
+        if (comentContent === "" || comentNickname === "") {
+        alert("내용, 닉네임을 모두 입력해주세요.");
+        return; // 저장을 차단
+    }
 
     var formData = {
         "postNo": postNo,
-        "comentContent": $("#comentContent").val(),
-        "comentNickname": $("#comentNickname").val(),
+        "comentContent": comentContent,
+        "comentNickname": comentNickname,
         "comentPW": $("#comentPW").val(),
         "cocomentNo": null,
         "comentDepth": 0
