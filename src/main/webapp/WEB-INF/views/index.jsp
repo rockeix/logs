@@ -51,6 +51,16 @@ ClassicEditor
     });
 
 function submitForm() {
+    var postName = $("#postName").val().trim();
+    var editorData = editor.getData().trim();
+    var userNickname = $("#userNickname").val().trim();
+    var userPW = $("#userPW").val().trim();
+
+    if (postName === "" || editorData === "" || userNickname === "") {
+        alert("제목, 내용, 닉네임을 모두 입력해주세요.");
+        return; // 저장을 차단
+    }
+
     var editorData = editor.getData();
     var parser = new DOMParser();
     var doc = parser.parseFromString(editorData, 'text/html');
@@ -64,10 +74,10 @@ function submitForm() {
     var updatedEditorData = doc.body.innerHTML;
 
     var formData = {
-        "postName": $("#postName").val(),
+        "postName": postName,
         "postContent": updatedEditorData,
-        "userNickname": $("#userNickname").val(),
-        "userPW": $("#userPW").val()
+        "userNickname": userNickname,
+        "userPW": userPW
     };
 
     var fileNames = getFileNames(images);
