@@ -67,6 +67,15 @@ public class LogsService implements LogsServiceInterface {
         }, postNo);
     }
 
+    @Override
+    public void writeComent(LogsComentDTO logsComentDTO) {
+        String sql = "INSERT INTO coment (postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth) VALUES (?, ?, ?, ?, ?, ?)";
+
+        jdbcTemplate.update(sql, logsComentDTO.getPostNo(), logsComentDTO.getcomentContent(),
+                logsComentDTO.getcomentNickname(),
+                logsComentDTO.getcomentPW(), logsComentDTO.getcocomentNo(), logsComentDTO.getcomentDepth());
+    }
+
     // @Override
     // public List<LogsDTO> getNos() {
     // String sql = "SELECT postName, postContent, userNickname, postIMG FROM post

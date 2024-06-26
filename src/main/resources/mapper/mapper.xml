@@ -4,18 +4,26 @@
   <insert id="insertPost" parameterType="logPoject.logs.DTO.LogsDTO">
     insert into post(postName, postContent, userNickname, userPW, postIMG) values (#{postName}, #{postContent}, #{userNickname}, #{userPW}, #{postIMG})
   </insert>
+
    <select id="getAllPosts" resultType="logPoject.logs.DTO.LogsDTO">
     SELECT postNo, postName, postContent, userNickname, postIMG,
     FROM post
   </select>
+
   <select id="getNos" resultType="logPoject.logs.DTO.LogsDTO">
     SELECT postNo, postName, postContent, userNickname, postIMG
     FROM  post 
     where postNo = #{postNo}
   </select>
+
   <select id="getClist" resultType="logPoject.logs.DTO.LogsComentDTO">
     SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth
     FROM coment
     where postNo = #{postNo}
   </select>
+
+  <insert id="writeComent" parameterType="logPoject.logs.DTO.LogsComentDTO">
+    INSERT INTO coment(postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth) VALUES (#{postNo}, #{comentContent}, #{comentNickname}, #{comentPW}, #{cocomentNo}, #{comentDepth})
+  </insert>
+
 </mapper>

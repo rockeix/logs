@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/logs")
@@ -101,4 +99,15 @@ public class LogsController {
         modelAndView.addObject("postNo", postNo);
         return modelAndView;
     }
+
+    @PostMapping("/write")
+    public ResponseEntity<?> writeComent(@RequestBody LogsComentDTO logsComentDTO) {
+        try {
+            logsService.writeComent(logsComentDTO);
+            return ResponseEntity.ok().body("Post saved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error saving post");
+        }
+    }
+
 }
