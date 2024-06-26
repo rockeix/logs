@@ -14,4 +14,6 @@ public interface LogsServiceInterface {
     List<LogsDTO> getNos(Long postNo);
 
     List<LogsComentDTO> getClist(Long postNo);
+
+    void writeComent(LogsComentDTO logsComentDTO);
 }

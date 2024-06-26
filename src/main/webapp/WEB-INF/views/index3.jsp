@@ -18,8 +18,7 @@
         <input type="Nickname" id="comentNickname" name="comentNickname" placeholder="닉네임"><br>
         <input type="password" id="comentPW" name="comentPW" placeholder="비밀번호"><br>
         <textarea id="comentContent" name="comentContent"></textarea>
-        <button type="button" class="comentbtn">등록</button>
-
+        <input type="button" value="등록" onclick="submitComment()"><br>
     </div>
     <input type="button" value="게시판 이동" onclick="index2()"><br>
 </form>
@@ -70,6 +69,38 @@ function getParameterByName(name, url) { // URL에서 특정 이름(name)의 쿼
     if (!results[2]) return ''; // 쿼리 파라미터의 값이 없을 경우, 빈 문자열 반환
     return decodeURIComponent(results[2].replace(/\+/g, " ")); // 쿼리 파라미터의 값을 디코딩하여 반환
 }
+
+function submitComment() {
+    // URL에서 포스트 넘버 가져오기
+    var postNo = decodeURIComponent(getParameterByName('postNo'));
+
+    var formData = {
+        "postNo": postNo,
+        "comentContent": $("#comentContent").val(),
+        "comentNickname": $("#comentNickname").val(),
+        "comentPW": $("#comentPW").val(),
+        "cocomentNo": null,
+        "comentDepth": 0
+    };
+
+    console.log("Form Data:", formData);
+
+    $.ajax({
+        type:"POST",
+        url:"/logs/write",
+        contentType:"application/json",
+        data:JSON.stringify(formData),
+        success:function(response){
+            alert("댓글 작성 성공.");
+             loadCommentlist(); // 댓글 작성 후 댓글 목록 다시 로드
+        },
+        error: function(xhr, status, error) {
+            alert("댓글 작성에 실패했습니다: " + xhr.responseText);
+        }
+    });
+    
+}
+
 
 function loadCommentlist() {
     // URL에서 포스트 넘버 가져오기
