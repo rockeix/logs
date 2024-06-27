@@ -51,12 +51,12 @@ ClassicEditor
     });
 
 function submitForm() {
-    var postName = $("#postName").val().trim();
+    var postName = $("#postName").val().trim(); //앞뒤로 여백없애기
     var editorData = editor.getData().trim();
     var userNickname = $("#userNickname").val().trim();
     var userPW = $("#userPW").val().trim();
 
-    if (postName === "" || editorData === "" || userNickname === "") {
+    if (postName === "" || editorData === "" || userNickname === "") { 
         alert("제목, 내용, 닉네임을 모두 입력해주세요.");
         return; // 저장을 차단
     }
