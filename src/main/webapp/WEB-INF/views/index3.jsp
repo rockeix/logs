@@ -100,7 +100,7 @@ function loadCommentlist() {
                 comentHTML += '<input type="text" id="replyNickname-' + coment.comentNo + '" placeholder="닉네임">';
                 comentHTML += '<input type="password" id="replyPW-' + coment.comentNo + '" placeholder="비밀번호">';
                 comentHTML += '<textarea id="replyContent-' + coment.comentNo + '" placeholder="답글 내용"></textarea>';
-                comentHTML += '<button onclick="submitReply(' + coment.postNo + ', ' + coment.comentNo + ', ' + (coment.comentDepth + 1) + ')">답글 제출</button>';
+                comentHTML += '<button onclick="submitReply(' + coment.postNo + ', ' + coment.comentNo + ', ' + (Number(coment.comentDepth) + 1) + ')">답글 제출</button>';
                 comentHTML += '</div>';
                 comentHTML += '</div>';
                 
@@ -166,7 +166,6 @@ function submitComment() {
         "comentContent": comentContent,
         "comentNickname": comentNickname,
         "comentPW": $("#comentPW").val(),
-        "comentNo": comentNo,
         "cocomentNo": null,
         "comentDepth": 0
     };
