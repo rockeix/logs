@@ -69,6 +69,16 @@ function getParameterByName(name, url) { // URL에서 특정 이름(name)의 쿼
     if (!results[2]) return ''; // 쿼리 파라미터의 값이 없을 경우, 빈 문자열 반환
     return decodeURIComponent(results[2].replace(/\+/g, " ")); // 쿼리 파라미터의 값을 디코딩하여 반환
 }
+
+function showReplyForm(comentNo) {
+    var replyForm = $("#replyForm-" + comentNo);
+    if (replyForm.css("display") === "none") {
+        replyForm.show();
+    } else {
+        replyForm.hide();
+    }
+}
+
 function loadCommentlist() {
     // URL에서 포스트 넘버 가져오기
     var postNo = decodeURIComponent(getParameterByName('postNo'));
@@ -85,12 +95,12 @@ function loadCommentlist() {
                 comentHTML += '<h2>' + coment.comentNickname + '</h2>';
                 comentHTML += '<p>' + coment.comentContent + '</p>';
                 comentHTML += '<p>' + coment.comentCreateDate + '</p>';
-                comentHTML += '<button onclick="showReplyForm(' + coment.comentNO + ')">답글 달기</button>';
-                comentHTML += '<div id="replyForm-' + coment.comentNO + '" style="display:none;">';
-                comentHTML += '<input type="text" id="replyNickname-' + coment.comentNO + '" placeholder="닉네임">';
-                comentHTML += '<input type="password" id="replyPW-' + coment.comentNO + '" placeholder="비밀번호">';
-                comentHTML += '<textarea id="replyContent-' + coment.comentNO + '" placeholder="답글 내용"></textarea>';
-                comentHTML += '<button onclick="submitReply(' + coment.postNo + ', ' + coment.comentNO + ', ' + (coment.comentDepth + 1) + ')">답글 제출</button>';
+                comentHTML += '<button onclick="showReplyForm(' + coment.comentNo + ')">답글 달기</button>';
+                comentHTML += '<div id="replyForm-' + coment.comentNo + '" style="display:none;">';
+                comentHTML += '<input type="text" id="replyNickname-' + coment.comentNo + '" placeholder="닉네임">';
+                comentHTML += '<input type="password" id="replyPW-' + coment.comentNo + '" placeholder="비밀번호">';
+                comentHTML += '<textarea id="replyContent-' + coment.comentNo + '" placeholder="답글 내용"></textarea>';
+                comentHTML += '<button onclick="submitReply(' + coment.postNo + ', ' + coment.comentNo + ', ' + (coment.comentDepth + 1) + ')">답글 제출</button>';
                 comentHTML += '</div>';
                 comentHTML += '</div>';
                 
@@ -103,10 +113,10 @@ function loadCommentlist() {
     });
 }
 
-function submitReply(postNo, comentNO, depth) {
-    var replyContent = $("#replyContent-" + comentNO).val().trim();
-    var replyNickname = $("#replyNickname-" + comentNO).val().trim();
-    var replyPW = $("#replyPW-" + comentNO).val().trim();
+function submitReply(postNo, comentNo, depth) {
+    var replyContent = $("#replyContent-" + comentNo).val().trim();
+    var replyNickname = $("#replyNickname-" + comentNo).val().trim();
+    var replyPW = $("#replyPW-" + comentNo).val().trim();
 
     if (replyContent === "" || replyNickname === "") {
         alert("내용, 닉네임을 모두 입력해주세요.");
@@ -118,7 +128,8 @@ function submitReply(postNo, comentNO, depth) {
         "comentContent": replyContent,
         "comentNickname": replyNickname,
         "comentPW": replyPW,
-        "cocomentNo": comentNO, // 부모 댓글의 ID
+        "comentNo": comentNo,
+        "cocomentNo": comentNo, // 부모 댓글의 ID
         "comentDepth": depth // 부모 댓글보다 1 증가
     };
 
@@ -138,6 +149,7 @@ function submitReply(postNo, comentNO, depth) {
         }
     });
 }
+
 function submitComment() {
     // URL에서 포스트 넘버 가져오기
     var postNo = decodeURIComponent(getParameterByName('postNo'));
@@ -154,6 +166,7 @@ function submitComment() {
         "comentContent": comentContent,
         "comentNickname": comentNickname,
         "comentPW": $("#comentPW").val(),
+        "comentNo": comentNo,
         "cocomentNo": null,
         "comentDepth": 0
     };
@@ -176,8 +189,8 @@ function submitComment() {
     
 }
 
-function showReplyForm(comentNO) {
-    $("#replyForm-" + comentNO).toggle();
+function showReplyForm(comentNo) {
+    $("#replyForm-" + comentNo).toggle();
 }
 
 function index2() {
