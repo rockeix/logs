@@ -60,7 +60,6 @@ function loadPostContent() {
         }
     });
 }
-
 function getParameterByName(name, url) { // URL에서 특정 이름(name)의 쿼리 파라미터(parameter) 값을 추출하는 함수
     if (!url) url = window.location.href; // URL이 주어지지 않았을 경우, 기본값으로 현재 창의 URL을 사용
     name = name.replace(/[\[\]]/g, "\\$&"); // 추출하려는 쿼리 파라미터의 이름에 대괄호([])가 포함되어 있을 수 있으므로 이스케이프 처리
@@ -70,7 +69,6 @@ function getParameterByName(name, url) { // URL에서 특정 이름(name)의 쿼
     if (!results[2]) return ''; // 쿼리 파라미터의 값이 없을 경우, 빈 문자열 반환
     return decodeURIComponent(results[2].replace(/\+/g, " ")); // 쿼리 파라미터의 값을 디코딩하여 반환
 }
-
 function loadCommentlist() {
     // URL에서 포스트 넘버 가져오기
     var postNo = decodeURIComponent(getParameterByName('postNo'));
@@ -92,7 +90,7 @@ function loadCommentlist() {
                 comentHTML += '<input type="text" id="replyNickname-' + coment.comentNO + '" placeholder="닉네임">';
                 comentHTML += '<input type="password" id="replyPW-' + coment.comentNO + '" placeholder="비밀번호">';
                 comentHTML += '<textarea id="replyContent-' + coment.comentNO + '" placeholder="답글 내용"></textarea>';
-                comentHTML += '<button onclick="submitReply(' + coment.postNo + ', ' + coment.comentNO + ', ' + (coment.comentDepth + 1) + ')">답글 제출</button>'; 
+                comentHTML += '<button onclick="submitReply(' + coment.postNo + ', ' + coment.comentNO + ', ' + (coment.comentDepth + 1) + ')">답글 제출</button>';
                 comentHTML += '</div>';
                 comentHTML += '</div>';
                 
@@ -105,6 +103,41 @@ function loadCommentlist() {
     });
 }
 
+function submitReply(postNo, comentNO, depth) {
+    var replyContent = $("#replyContent-" + comentNO).val().trim();
+    var replyNickname = $("#replyNickname-" + comentNO).val().trim();
+    var replyPW = $("#replyPW-" + comentNO).val().trim();
+
+    if (replyContent === "" || replyNickname === "") {
+        alert("내용, 닉네임을 모두 입력해주세요.");
+        return; // 저장을 차단
+    }
+
+    var formData = {
+        "postNo": postNo,
+        "comentContent": replyContent,
+        "comentNickname": replyNickname,
+        "comentPW": replyPW,
+        "cocomentNo": comentNO, // 부모 댓글의 ID
+        "comentDepth": depth // 부모 댓글보다 1 증가
+    };
+
+    console.log("Form Data:", formData);
+
+    $.ajax({
+        type: "POST",
+        url: "/logs/write",
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        success: function(response) {
+            alert("답글 작성 성공.");
+            loadCommentlist(); // 답글 작성 후 댓글 목록 다시 로드
+        },
+        error: function(xhr, status, error) {
+            alert("답글 작성에 실패했습니다: " + xhr.responseText);
+        }
+    });
+}
 function submitComment() {
     // URL에서 포스트 넘버 가져오기
     var postNo = decodeURIComponent(getParameterByName('postNo'));
