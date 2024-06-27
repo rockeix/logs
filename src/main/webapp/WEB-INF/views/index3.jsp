@@ -176,6 +176,10 @@ function submitComment() {
     
 }
 
+function showReplyForm(comentNO) {
+    $("#replyForm-" + comentNO).toggle();
+}
+
 function index2() {
     window.location.href = "/logs/index2";
 }
