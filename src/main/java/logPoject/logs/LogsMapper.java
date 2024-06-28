@@ -26,6 +26,9 @@ public interface LogsMapper {
     @Select("SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment where postNo = #{postNo}")
     List<LogsComentDTO> getClist();
 
-    @Select("INSERT INTO coment (postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth) VALUES (#{postNo}, #{comentContent}, #{comentNickname}, #{comentPW}, #{cocomentNo}, #{comentDepth})")
+    @Insert("INSERT INTO coment (postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth) VALUES (#{postNo}, #{comentContent}, #{comentNickname}, #{comentPW}, #{cocomentNo}, #{comentDepth})")
     void writeComent(LogsComentDTO logsComentDTO);
+
+    @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post where postName like '%${search}%'")
+    List<LogsDTO> getPostNamePost();
 }

@@ -110,4 +110,10 @@ public class LogsController {
         }
     }
 
+    @GetMapping("/Pon")
+    public ResponseEntity<List<LogsDTO>> getPoName(@RequestParam String search) {
+        List<LogsDTO> Pon = logsService.getPoName(search);
+        return ResponseEntity.ok().body(Pon);
+    }
+
 }

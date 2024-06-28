@@ -76,18 +76,18 @@ public class LogsService implements LogsServiceInterface {
                 logsComentDTO.getcomentPW(), logsComentDTO.getcocomentNo(), logsComentDTO.getcomentDepth());
     }
 
-    // @Override
-    // public List<LogsDTO> getNos() {
-    // String sql = "SELECT postName, postContent, userNickname, postIMG FROM post
-    // where postNo = ?";
-    // return jdbcTemplate.query(sql, (rs, rowNum) -> {
-    // LogsDTO logsDTO = new LogsDTO();
-    // logsDTO.setPostName(rs.getString("postName"));
-    // logsDTO.setPostContent(rs.getString("postContent"));
-    // logsDTO.setUserNickname(rs.getString("userNickname"));
-    // logsDTO.setPostIMG(rs.getString("postIMG"));
-    // return logsDTO;
-    // });
-    // }
+    public List<LogsDTO> getPoName(String search) {
+        String sql = "SELECT postNo, postName, postContent, userNickname, postIMG FROM post WHERE postName LIKE ?";
+        String searchPattern = "%" + search + "%";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            LogsDTO logsDTO = new LogsDTO();
+            logsDTO.setPostNo(rs.getString("postNo"));
+            logsDTO.setPostName(rs.getString("postName"));
+            logsDTO.setPostContent(rs.getString("postContent"));
+            logsDTO.setUserNickname(rs.getString("userNickname"));
+            logsDTO.setPostIMG(rs.getString("postIMG"));
+            return logsDTO;
+        }, searchPattern);
+    }
 
 }

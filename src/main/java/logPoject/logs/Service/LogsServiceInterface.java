@@ -16,4 +16,6 @@ public interface LogsServiceInterface {
     List<LogsComentDTO> getClist(Long postNo);
 
     void writeComent(LogsComentDTO logsComentDTO);
+
+    List<LogsDTO> getPoName(String search);
 }

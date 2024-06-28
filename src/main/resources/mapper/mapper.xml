@@ -26,4 +26,10 @@
     INSERT INTO coment(postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth) VALUES (#{postNo}, #{comentContent}, #{comentNickname}, #{comentPW}, #{cocomentNo}, #{comentDepth})
   </insert>
 
+  <select id="getPostNamePost" resultType="logPoject.logs.DTO.LogsDTO">
+  SELECT postNo, postName, postContent, userNickname, postIMG
+  FROM post
+  WHERE postName LIKE CONCAT('%', #{search}, '%')
+</select>
+
 </mapper>
