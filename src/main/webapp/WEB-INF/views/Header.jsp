@@ -13,10 +13,10 @@
 <div id="head">
     <header>
         <div id="logo">
-            <h1> <a href="/logs/index2">logo</a><h1>
+            <h1> <a href="/logs/index2"><img src= "/IMG/pojectlogo.png"width="64" height="64"></a><h1>
         </div>
         <div id="search">
-            <h1> <a href="/logs/search">search</a><h1>
+            <h1> <a href="/logs/search"><img src= "/IMG/search.png"width="32" height="32"></a><h1>
         </div>
     </header>
 </div>
