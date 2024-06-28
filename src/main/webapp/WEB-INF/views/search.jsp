@@ -25,7 +25,7 @@
                             var resultsDiv = $('#results');
                             resultsDiv.empty();
                             data.forEach(function(item) {
-                                var resultHtml = '<div class="result">' +
+                                var resultHtml = '<div class="result" data-id="' + item.postNo + '">' +
                                     item.postNo + '<br>' +
                                     item.postName + '<br>' +
                                     item.postContent + '<br>' +
@@ -33,6 +33,10 @@
                                     '</div>';
                                 resultsDiv.append(resultHtml);
                             });
+                            $(".result").click(function() {
+                var postNo = $(this).data("id"); // 클릭한 포스트의 넘버 가져오기
+                window.location.href = "/logs/index3?postNo=" + encodeURIComponent(postNo);
+            });
                         }
                     });
                 } else {
