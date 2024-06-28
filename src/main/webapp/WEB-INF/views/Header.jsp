@@ -16,11 +16,13 @@
             <h1> <a href="/logs/index2">logo</a><h1>
         </div>
         <div id="search">
-        
+            <h1> <a href="/logs/search">search</a><h1>
         </div>
     </header>
 </div>
-<script>
+ <script>
+  
 </script>
+
 </body>
 </html>

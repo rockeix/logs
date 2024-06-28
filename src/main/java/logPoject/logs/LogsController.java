@@ -116,4 +116,9 @@ public class LogsController {
         return ResponseEntity.ok().body(Pon);
     }
 
+    @RequestMapping("/search")
+    public ModelAndView search() {
+        ModelAndView modelAndView = new ModelAndView("search");
+        return modelAndView;
+    }
 }
