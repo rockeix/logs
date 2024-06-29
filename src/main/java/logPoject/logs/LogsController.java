@@ -123,13 +123,9 @@ public class LogsController {
     }
 
     @PostMapping("/update")
-<<<<<<< HEAD
-    public ResponseEntity<?> deleteComent(@RequestBody int comentNo) {
-=======
     public ResponseEntity<?> deleteComent(@RequestBody LogsComentDTO logsComentDTO) {
->>>>>>> 1da5cefde484a46cec96daf9af06f970bf25ddda
         try {
-            logsService.deleteComent(comentNo);
+            logsService.deleteComent(logsComentDTO);
             return ResponseEntity.ok().body("Post saved successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error saving post");

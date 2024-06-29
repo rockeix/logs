@@ -211,37 +211,27 @@ function hideDeleteForm(comentNo) {
     $('#deleteForm-' + comentNo).remove();
 }
 
-function deleteComment(comentNo,password) {
-    var password = $('#deletePW-' + comentNo).val();
 
-    if (password === '') {
+function deleteComment(comentPW,comentNo) {
+    var comentPW = $('#deletePW-' + comentNo).val();
+
+    if (comentPW === '') {
         alert("비밀번호를 입력해주세요.");
         return;
     }
 
-    var formData = {
-        "comentNo": comentNo,
-        "comentPW": password,
-    };
-
-    console.log("Form Data:", formData);
-
     $.ajax({
         type: "POST",
         url: "/logs/update",  // 서버에서 댓글 삭제를 처리하는 엔드포인트
-        data: JSON.stringify(formData),
+        data: JSON.stringify({ comentNo: comentNo, comentPW: comentPW }),
         contentType: "application/json",
         success: function(response) {
-            if (response.success) {
                 alert("댓글이 삭제되었습니다.");
                 hideDeleteForm(comentNo);
                 loadCommentlist(); // 댓글 리스트를 다시 로드하여 갱신
-            } else {
-                alert("비밀번호가 올바르지 않습니다.");
-            }
         },
         error: function(xhr, status, error) {
-            alert("에러 입니다: " + error);
+            alert("비밀번호가 올바르지 않습니다.:" + error);
         }
     });
 }
