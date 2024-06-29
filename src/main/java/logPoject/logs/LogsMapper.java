@@ -33,6 +33,6 @@ public interface LogsMapper {
     @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post where postName like '%${search}%'")
     List<LogsDTO> getPostNamePost();
 
-    @Update("UPDATE coment SET comentContent = '삭제된 댓글입니다', comentNickname = '', comentPw = '', comentDelete = 1 WHERE comentNo = #{comentNo}")
+    @Update("UPDATE coment SET comentContent = '삭제된 댓글입니다', comentNickname = '', comentPW = '', comentDelete = 1 WHERE comentNo = #{comentNo}")
     void deleteComent(int comentNo);
 }

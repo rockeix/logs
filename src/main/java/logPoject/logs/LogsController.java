@@ -121,4 +121,15 @@ public class LogsController {
         ModelAndView modelAndView = new ModelAndView("search");
         return modelAndView;
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> deleteComent(@RequestBody int logsComentDTO) {
+        try {
+            logsService.deleteComent(logsComentDTO);
+            return ResponseEntity.ok().body("Post saved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error saving post");
+        }
+    }
+
 }

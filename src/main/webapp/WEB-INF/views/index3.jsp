@@ -95,11 +95,6 @@ function loadCommentlist() {
             $("#comentlist").empty(); // 기존 댓글 삭제
             response.forEach(function(coment) {
                 var comentHTML = '<div class="postNo" data-id="' + coment.postNo + '">';
-
-                if (coment.comentDelete) {
-                    comentHTML += '<h2>삭제된 댓글</h2>';
-                    comentHTML += '<p>이 댓글은 삭제되었습니다.</p>';
-                } else {
                     comentHTML += '<h2>' + coment.comentNickname + '</h2>';
                     comentHTML += '<p class="comentContent" onclick="showReplyForm(' + coment.comentNo + ')">' + coment.comentContent + '</p>';
                     comentHTML += '<p>' + coment.comentCreateDate + '</p>';
@@ -110,9 +105,7 @@ function loadCommentlist() {
                     comentHTML += '<textarea id="replyContent-' + coment.comentNo + '" placeholder="답글 내용"></textarea>';
                     comentHTML += '<button onclick="submitReply(' + coment.postNo + ', ' + coment.comentNo + ', ' + (Number(coment.comentDepth) + 1) + ')">답글 제출</button>';
                     comentHTML += '</div>';
-                }
-
-                comentHTML += '</div>';
+                     comentHTML += '</div>';
                 $("#comentlist").append(comentHTML);
             });
         },
@@ -230,8 +223,8 @@ function deleteComment(postNo, comentNo) {
 
     $.ajax({
         type: "POST",
-        url: "/logs/deleteComment",  // 서버에서 댓글 삭제를 처리하는 엔드포인트
-        data: JSON.stringify({ postNo: postNo, comentNo: comentNo, password: password }),
+        url: "/logs/update",  // 서버에서 댓글 삭제를 처리하는 엔드포인트
+        data: JSON.stringify({ comentNo: comentNo, password: password }),
         contentType: "application/json",
         success: function(response) {
             if (response.success) {

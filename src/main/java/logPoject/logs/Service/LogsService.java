@@ -51,12 +51,9 @@ public class LogsService implements LogsServiceInterface {
         });
     }
 
+    @Override
     public List<LogsComentDTO> getClist(Long postNo) {
-<<<<<<< HEAD
-        String sql = "SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth comentDelete FROM coment WHERE postNo = ?";
-=======
         String sql = "SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth, comentDelete FROM coment WHERE postNo = ?";
->>>>>>> dc887ea934cb9d04d297a6ad8d5d57050638f46e
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsComentDTO logsComentDTO = new LogsComentDTO();
             logsComentDTO.setPostNo(rs.getString("postNo"));
@@ -74,11 +71,11 @@ public class LogsService implements LogsServiceInterface {
 
     @Override
     public void writeComent(LogsComentDTO logsComentDTO) {
-        String sql = "INSERT INTO coment (postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth, comentDelete) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO coment (postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth) VALUES (?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, logsComentDTO.getPostNo(), logsComentDTO.getcomentContent(),
                 logsComentDTO.getcomentNickname(),
-                logsComentDTO.getcomentPW(), logsComentDTO.getcocomentNo(), logsComentDTO.getcomentDepth(), logsComentDTO.);
+                logsComentDTO.getcomentPW(), logsComentDTO.getcocomentNo(), logsComentDTO.getcomentDepth());
     }
 
     public List<LogsDTO> getPoName(String search) {
@@ -97,7 +94,7 @@ public class LogsService implements LogsServiceInterface {
 
     @Override
     public void deleteComent(int comentNo) {
-        String sql = "UPDATE coment SET comentContent = '삭제된 댓글입니다', comentNickname = '', comentPw = '', comentDelete = 1 WHERE comentNo = ?;";
+        String sql = "UPDATE coment SET comentContent = '삭제된 댓글입니다', comentNickname = '', comentPW = '', comentDelete = 1 WHERE comentNo = ?;";
         jdbcTemplate.update(sql, comentNo);
     }
 
