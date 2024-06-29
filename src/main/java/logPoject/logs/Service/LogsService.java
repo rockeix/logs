@@ -52,7 +52,7 @@ public class LogsService implements LogsServiceInterface {
     }
 
     public List<LogsComentDTO> getClist(Long postNo) {
-        String sql = "SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment WHERE postNo = ?";
+        String sql = "SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth comentDelete FROM coment WHERE postNo = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsComentDTO logsComentDTO = new LogsComentDTO();
             logsComentDTO.setPostNo(rs.getString("postNo"));
@@ -69,11 +69,11 @@ public class LogsService implements LogsServiceInterface {
 
     @Override
     public void writeComent(LogsComentDTO logsComentDTO) {
-        String sql = "INSERT INTO coment (postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO coment (postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth, comentDelete) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, logsComentDTO.getPostNo(), logsComentDTO.getcomentContent(),
                 logsComentDTO.getcomentNickname(),
-                logsComentDTO.getcomentPW(), logsComentDTO.getcocomentNo(), logsComentDTO.getcomentDepth());
+                logsComentDTO.getcomentPW(), logsComentDTO.getcocomentNo(), logsComentDTO.getcomentDepth(), logsComentDTO.);
     }
 
     public List<LogsDTO> getPoName(String search) {

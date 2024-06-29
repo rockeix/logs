@@ -21,7 +21,8 @@
         <textarea id="comentContent" name="comentContent"></textarea>
         <input type="button" value="등록" onclick="submitComment()"><br>
     </div>
-    <input type="button" value="게시판 이동" onclick="index2()"><br>
+    <input type="button" value="게시판 이동" onclick="index2()">
+    <input type="button" value="삭제" onclick="">
 </form>
 
 
@@ -61,6 +62,7 @@ function loadPostContent() {
         }
     });
 }
+
 function getParameterByName(name, url) { // URL에서 특정 이름(name)의 쿼리 파라미터(parameter) 값을 추출하는 함수
     if (!url) url = window.location.href; // URL이 주어지지 않았을 경우, 기본값으로 현재 창의 URL을 사용
     name = name.replace(/[\[\]]/g, "\\$&"); // 추출하려는 쿼리 파라미터의 이름에 대괄호([])가 포함되어 있을 수 있으므로 이스케이프 처리
@@ -83,33 +85,39 @@ function showReplyForm(comentNo) {
 function loadCommentlist() {
     // URL에서 포스트 넘버 가져오기
     var postNo = decodeURIComponent(getParameterByName('postNo'));
-    
+
     $.ajax({
-        type:"GET",
-        url:"/logs/Clist",
+        type: "GET",
+        url: "/logs/Clist",
         data: { postNo: postNo },
-        contentType:"application/json",
-        success:function(response){
+        contentType: "application/json",
+        success: function(response) {
             $("#comentlist").empty(); // 기존 댓글 삭제
-            response.forEach(function(coment){
+            response.forEach(function(coment) {
                 var comentHTML = '<div class="postNo" data-id="' + coment.postNo + '">';
-                comentHTML += '<h2>' + coment.comentNickname + '</h2>';
-                comentHTML += '<p>' + coment.comentContent + '</p>';
-                comentHTML += '<p>' + coment.comentCreateDate + '</p>';
-                comentHTML += '<button onclick="showReplyForm(' + coment.comentNo + ')">답글 달기</button>';
-                comentHTML += '<div id="replyForm-' + coment.comentNo + '" style="display:none;">';
-                comentHTML += '<input type="text" id="replyNickname-' + coment.comentNo + '" placeholder="닉네임">';
-                comentHTML += '<input type="password" id="replyPW-' + coment.comentNo + '" placeholder="비밀번호">';
-                comentHTML += '<textarea id="replyContent-' + coment.comentNo + '" placeholder="답글 내용"></textarea>';
-                comentHTML += '<button onclick="submitReply(' + coment.postNo + ', ' + coment.comentNo + ', ' + (Number(coment.comentDepth) + 1) + ')">답글 제출</button>';
+
+                if (coment.comentDeleted) {
+                    comentHTML += '<h2>삭제된 댓글</h2>';
+                    comentHTML += '<p>이 댓글은 삭제되었습니다.</p>';
+                } else {
+                    comentHTML += '<h2>' + coment.comentNickname + '</h2>';
+                    comentHTML += '<p class="comentContent" onclick="showReplyForm(' + coment.comentNo + ')">' + coment.comentContent + '</p>';
+                    comentHTML += '<p>' + coment.comentCreateDate + '</p>';
+                    comentHTML += '<button onclick="showDeletePasswordForm(' + coment.postNo + ', ' + coment.comentNo + ')">삭제</button>';
+                    comentHTML += '<div id="replyForm-' + coment.comentNo + '" style="display:none;">';
+                    comentHTML += '<input type="text" id="replyNickname-' + coment.comentNo + '" placeholder="닉네임">';
+                    comentHTML += '<input type="password" id="replyPW-' + coment.comentNo + '" placeholder="비밀번호">';
+                    comentHTML += '<textarea id="replyContent-' + coment.comentNo + '" placeholder="답글 내용"></textarea>';
+                    comentHTML += '<button onclick="submitReply(' + coment.postNo + ', ' + coment.comentNo + ', ' + (Number(coment.comentDepth) + 1) + ')">답글 제출</button>';
+                    comentHTML += '</div>';
+                }
+
                 comentHTML += '</div>';
-                comentHTML += '</div>';
-                
                 $("#comentlist").append(comentHTML);
             });
         },
-                error: function(xhr, status, error) {
-                    alert("에러 입니다: " + error);
+        error: function(xhr, status, error) {
+            alert("에러 입니다: " + error);
         }
     });
 }
@@ -119,7 +127,7 @@ function submitReply(postNo, comentNo, depth) {
     var replyNickname = $("#replyNickname-" + comentNo).val().trim();
     var replyPW = $("#replyPW-" + comentNo).val().trim();
 
-    if (replyContent === "" || replyNickname === "") {
+    if (replyContent === "" || replyNickname === "" || replyPW === "") {
         alert("내용, 닉네임을 모두 입력해주세요.");
         return; // 저장을 차단
     }
@@ -156,8 +164,9 @@ function submitComment() {
     var postNo = decodeURIComponent(getParameterByName('postNo'));
     var comentContent = $("#comentContent").val().trim();
     var comentNickname = $("#comentNickname").val().trim();
-
-        if (comentContent === "" || comentNickname === "") {
+    var comentPW = $("#comentPW").val().trim():
+    
+        if (comentContent === "" || comentNickname === "" || comentPW ==="") {
         alert("내용, 닉네임을 모두 입력해주세요.");
         return; // 저장을 차단
     }
@@ -166,7 +175,7 @@ function submitComment() {
         "postNo": postNo,
         "comentContent": comentContent,
         "comentNickname": comentNickname,
-        "comentPW": $("#comentPW").val(),
+        "comentPW": comentPW,
         "cocomentNo": null,
         "comentDepth": 0
     };
@@ -191,6 +200,50 @@ function submitComment() {
 
 function showReplyForm(comentNo) {
     $("#replyForm-" + comentNo).toggle();
+}
+
+function showDeletePasswordForm(postNo, comentNo) {
+    var deleteFormHTML = '<div id="deleteForm-' + comentNo + '" class="deleteForm">';
+    deleteFormHTML += '<h3>댓글 삭제</h3>';
+    deleteFormHTML += '<input type="password" id="deletePW-' + comentNo + '" placeholder="비밀번호">';
+    deleteFormHTML += '<button onclick="deleteComment(' + postNo + ', ' + comentNo + ')">삭제</button>';
+    deleteFormHTML += '<button onclick="hideDeleteForm(' + comentNo + ')">취소</button>';
+    deleteFormHTML += '</div>';
+
+     // 특정 댓글 요소 내부에 삭제 폼 추가
+    $('#replyForm-' + comentNo).after(deleteFormHTML);
+}
+
+function hideDeleteForm(comentNo) {
+    $('#deleteForm-' + comentNo).remove();
+}
+
+function deleteComment(postNo, comentNo) {
+    var password = $('#deletePW-' + comentNo).val();
+
+    if (password === '') {
+        alert("비밀번호를 입력해주세요.");
+        return;
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/logs/deleteComment",  // 서버에서 댓글 삭제를 처리하는 엔드포인트
+        data: JSON.stringify({ postNo: postNo, comentNo: comentNo, password: password }),
+        contentType: "application/json",
+        success: function(response) {
+            if (response.success) {
+                alert("댓글이 삭제되었습니다.");
+                hideDeleteForm(comentNo);
+                loadCommentlist(); // 댓글 리스트를 다시 로드하여 갱신
+            } else {
+                alert("비밀번호가 올바르지 않습니다.");
+            }
+        },
+        error: function(xhr, status, error) {
+            alert("에러 입니다: " + error);
+        }
+    });
 }
 
 function index2() {
