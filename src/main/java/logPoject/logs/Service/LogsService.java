@@ -52,7 +52,11 @@ public class LogsService implements LogsServiceInterface {
     }
 
     public List<LogsComentDTO> getClist(Long postNo) {
+<<<<<<< HEAD
         String sql = "SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth comentDelete FROM coment WHERE postNo = ?";
+=======
+        String sql = "SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth, comentDelete FROM coment WHERE postNo = ?";
+>>>>>>> dc887ea934cb9d04d297a6ad8d5d57050638f46e
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsComentDTO logsComentDTO = new LogsComentDTO();
             logsComentDTO.setPostNo(rs.getString("postNo"));
@@ -63,6 +67,7 @@ public class LogsService implements LogsServiceInterface {
             logsComentDTO.setcomentNo(rs.getString("comentNo"));
             logsComentDTO.setcocomentNo(rs.getString("cocomentNo"));
             logsComentDTO.setcomentDepth(rs.getString("comentDepth"));
+            logsComentDTO.setcomentDelete(rs.getString("comentDelete"));
             return logsComentDTO;
         }, postNo);
     }
@@ -88,6 +93,12 @@ public class LogsService implements LogsServiceInterface {
             logsDTO.setPostIMG(rs.getString("postIMG"));
             return logsDTO;
         }, searchPattern);
+    }
+
+    @Override
+    public void deleteComent(int comentNo) {
+        String sql = "UPDATE coment SET comentContent = '삭제된 댓글입니다', comentNickname = '', comentPw = '', comentDelete = 1 WHERE comentNo = ?;";
+        jdbcTemplate.update(sql, comentNo);
     }
 
 }

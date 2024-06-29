@@ -85,6 +85,6 @@ public String getcomentDelete() {
 }
 
 public void setcomentDelete(String comentDelete) {
-    this.comentDepth = comentDelete;
+    this.comentDelete = comentDelete;
 }
 };
