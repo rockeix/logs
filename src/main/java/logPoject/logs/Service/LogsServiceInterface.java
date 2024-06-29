@@ -19,5 +19,5 @@ public interface LogsServiceInterface {
 
     List<LogsDTO> getPoName(String search);
 
-    void deleteComent(int comentNo);
+    void deleteComent(LogsComentDTO logsComentDTO);
 }

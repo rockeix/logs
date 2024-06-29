@@ -93,9 +93,9 @@ public class LogsService implements LogsServiceInterface {
     }
 
     @Override
-    public void deleteComent(int comentNo) {
+    public void deleteComent(LogsComentDTO logsComentDTO) {
         String sql = "UPDATE coment SET comentContent = '삭제된 댓글입니다', comentNickname = '', comentPW = '', comentDelete = 1 WHERE comentNo = ?;";
-        jdbcTemplate.update(sql, comentNo);
+        jdbcTemplate.update(sql, logsComentDTO.getcomentNo());
     }
 
 }
