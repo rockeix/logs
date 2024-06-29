@@ -96,7 +96,7 @@ function loadCommentlist() {
             response.forEach(function(coment) {
                 var comentHTML = '<div class="postNo" data-id="' + coment.postNo + '">';
 
-                if (coment.comentDeleted) {
+                if (coment.comentDelete) {
                     comentHTML += '<h2>삭제된 댓글</h2>';
                     comentHTML += '<p>이 댓글은 삭제되었습니다.</p>';
                 } else {
@@ -139,7 +139,8 @@ function submitReply(postNo, comentNo, depth) {
         "comentPW": replyPW,
         "comentNo": comentNo,
         "cocomentNo": comentNo, // 부모 댓글의 ID
-        "comentDepth": depth // 부모 댓글보다 1 증가
+        "comentDepth": depth, // 부모 댓글보다 1 증가
+        "comentDelete": comentDelete
     };
 
     console.log("Form Data:", formData);
@@ -164,8 +165,8 @@ function submitComment() {
     var postNo = decodeURIComponent(getParameterByName('postNo'));
     var comentContent = $("#comentContent").val().trim();
     var comentNickname = $("#comentNickname").val().trim();
-    var comentPW = $("#comentPW").val().trim():
-    
+    var comentPW = $("#comentPW").val().trim();
+
         if (comentContent === "" || comentNickname === "" || comentPW ==="") {
         alert("내용, 닉네임을 모두 입력해주세요.");
         return; // 저장을 차단
@@ -177,7 +178,8 @@ function submitComment() {
         "comentNickname": comentNickname,
         "comentPW": comentPW,
         "cocomentNo": null,
-        "comentDepth": 0
+        "comentDepth": 0,
+        "comentDelete": comentDelete
     };
 
     console.log("Form Data:", formData);
