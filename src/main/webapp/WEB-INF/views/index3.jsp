@@ -133,7 +133,6 @@ function submitReply(postNo, comentNo, depth) {
         "comentNo": comentNo,
         "cocomentNo": comentNo, // 부모 댓글의 ID
         "comentDepth": depth, // 부모 댓글보다 1 증가
-        "comentDelete": comentDelete
     };
 
     console.log("Form Data:", formData);
@@ -172,7 +171,6 @@ function submitComment() {
         "comentPW": comentPW,
         "cocomentNo": null,
         "comentDepth": 0,
-        "comentDelete": comentDelete
     };
 
     console.log("Form Data:", formData);
@@ -213,7 +211,7 @@ function hideDeleteForm(comentNo) {
     $('#deleteForm-' + comentNo).remove();
 }
 
-function deleteComment(postNo, comentNo) {
+function deleteComment(comentNo,password) {
     var password = $('#deletePW-' + comentNo).val();
 
     if (password === '') {
@@ -221,10 +219,17 @@ function deleteComment(postNo, comentNo) {
         return;
     }
 
+    var formData = {
+        "comentNo": comentNo,
+        "comentPW": password,
+    };
+
+    console.log("Form Data:", formData);
+
     $.ajax({
         type: "POST",
         url: "/logs/update",  // 서버에서 댓글 삭제를 처리하는 엔드포인트
-        data: JSON.stringify({ comentNo: comentNo, password: password }),
+        data: JSON.stringify(formData),
         contentType: "application/json",
         success: function(response) {
             if (response.success) {
