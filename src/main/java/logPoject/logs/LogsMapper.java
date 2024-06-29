@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -23,7 +24,7 @@ public interface LogsMapper {
     @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post where postNo = #{postNo}")
     LogsDTO getNos(int postNo);
 
-    @Select("SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth FROM coment where postNo = #{postNo}")
+    @Select("SELECT postNo, comentContent, comentCreateDate, comentNickname, comentPW, comentNo, cocomentNo, comentDepth, comentDelete FROM coment where postNo = #{postNo}")
     List<LogsComentDTO> getClist();
 
     @Insert("INSERT INTO coment (postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth) VALUES (#{postNo}, #{comentContent}, #{comentNickname}, #{comentPW}, #{cocomentNo}, #{comentDepth})")
@@ -31,4 +32,7 @@ public interface LogsMapper {
 
     @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post where postName like '%${search}%'")
     List<LogsDTO> getPostNamePost();
+
+    @Update("UPDATE coment SET comentContent = '삭제된 댓글입니다', comentNickname = '', comentPw = '', comentDelete = 1 WHERE comentNo = #{comentNo}")
+    void deleteComent(int comentNo);
 }
