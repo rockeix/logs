@@ -123,7 +123,7 @@ public class LogsController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> deleteComent(@RequestBody int logsComentDTO) {
+    public ResponseEntity<?> deleteComent(@RequestBody LogsComentDTO logsComentDTO) {
         try {
             logsService.deleteComent(logsComentDTO);
             return ResponseEntity.ok().body("Post saved successfully");
