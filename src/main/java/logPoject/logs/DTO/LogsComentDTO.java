@@ -14,6 +14,7 @@ public class LogsComentDTO {
     private String comentNo;
     private String cocomentNo;
     private String comentDepth;
+    private String comentDelete;
 
 public String getPostNo() {
         return postNo;
@@ -77,5 +78,13 @@ public String getcomentDepth() {
 
 public void setcomentDepth(String comentDepth) {
     this.comentDepth = comentDepth;
+}
+
+public String getcomentDelete() {
+    return comentDelete;
+}
+
+public void setcomentDelete(String comentDelete) {
+    this.comentDepth = comentDelete;
 }
 };
