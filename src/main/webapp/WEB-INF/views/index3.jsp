@@ -214,6 +214,7 @@ function hideDeleteForm(comentNo) {
 
 function deleteComment(comentPW,comentNo) {
     var comentPW = $('#deletePW-' + comentNo).val();
+    var postNo = decodeURIComponent(getParameterByName('postNo'));
 
     if (comentPW === '') {
         alert("비밀번호를 입력해주세요.");

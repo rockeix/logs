@@ -37,5 +37,5 @@ public interface LogsMapper {
     void deleteComent(LogsComentDTO logsComentDTO);
 
     @Select("SELECT comentPW FROM coment WHERE comentNo = #{comentNo}")
-    List<LogsComentDTO> verify(String comentNo);
+    List<LogsComentDTO> verify(int comentNo);
 }
