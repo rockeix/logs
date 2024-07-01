@@ -99,13 +99,9 @@ function loadCommentlist() {
                     comentHTML += '<p class="comentContent" onclick="showReplyForm(' + coment.comentNo + ')">' + coment.comentContent + '</p>';
                     comentHTML += '<p>' + coment.comentCreateDate + '</p>';
                  
-                 // comecomentDeletentdelete 값 확인
-                console.log('comentDelete:', coment.comentDelete);
-
-                // comentDelete가 0인 경우에만 삭제 버튼 추가
-                if (coment.comentDelete === 0 || coment.comentDelete === '0') {
+                 if (coment.comentDelete === "0") {
                     comentHTML += '<button onclick="showDeletePasswordForm(' + coment.postNo + ', ' + coment.comentNo + ')">삭제</button>';
-                }
+                    }
                     comentHTML += '<div id="replyForm-' + coment.comentNo + '" style="display:none;">';
                     comentHTML += '<input type="text" id="replyNickname-' + coment.comentNo + '" placeholder="닉네임">';
                     comentHTML += '<input type="password" id="replyPW-' + coment.comentNo + '" placeholder="비밀번호">';
