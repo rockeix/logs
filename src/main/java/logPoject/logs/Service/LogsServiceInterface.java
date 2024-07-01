@@ -20,4 +20,6 @@ public interface LogsServiceInterface {
     List<LogsDTO> getPoName(String search);
 
     void deleteComent(LogsComentDTO logsComentDTO);
+
+    List<LogsComentDTO> verify(String comentNo);
 }

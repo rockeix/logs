@@ -32,6 +32,12 @@
   WHERE postName LIKE CONCAT('%', #{search}, '%')
   </select>
 
+  <select id="verify" resultType="logPoject.logs.DTO.LogsComentDTO">
+    SELECT comentPW
+    FROM coment
+    WHERE comentNo = #{comentNo}
+  </select>
+
   <update id="deleteComent" parameterType="int">
     UPDATE coment
     SET comentContent = '삭제된 댓글입니다',

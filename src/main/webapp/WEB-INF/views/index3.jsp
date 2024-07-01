@@ -222,16 +222,32 @@ function deleteComment(comentPW,comentNo) {
 
     $.ajax({
         type: "POST",
-        url: "/logs/update",  // 서버에서 댓글 삭제를 처리하는 엔드포인트
+        url: "/logs/verify",  // 서버에서 비밀번호 검증을 처리하는 엔드포인트
         data: JSON.stringify({ comentNo: comentNo, comentPW: comentPW }),
         contentType: "application/json",
         success: function(response) {
-                alert("댓글이 삭제되었습니다.");
-                hideDeleteForm(comentNo);
-                loadCommentlist(); // 댓글 리스트를 다시 로드하여 갱신
+            if (response.valid) {
+                // 비밀번호가 유효하면 댓글 삭제 요청
+                $.ajax({
+                    type: "POST",
+                    url: "/logs/update",  // 서버에서 댓글 삭제를 처리하는 엔드포인트
+                    data: JSON.stringify({ comentNo: comentNo }),
+                    contentType: "application/json",
+                    success: function(response) {
+                        alert("댓글이 삭제되었습니다.");
+                        hideDeleteForm(comentNo);
+                        loadCommentlist(postNo); // 댓글 리스트를 다시 로드하여 갱신
+                    },
+                    error: function(xhr, status, error) {
+                        alert("댓글 삭제에 실패하였습니다.");
+                    }
+                });
+            } else {
+                alert("비밀번호가 올바르지 않습니다.");
+            }
         },
         error: function(xhr, status, error) {
-            alert("비밀번호가 올바르지 않습니다.:" + error);
+            alert("비밀번호 확인에 실패하였습니다.");
         }
     });
 }

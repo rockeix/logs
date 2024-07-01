@@ -6,14 +6,17 @@ import logPoject.logs.DTO.LogsComentDTO;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LogsService implements LogsServiceInterface {
     private final JdbcTemplate jdbcTemplate;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public LogsService(JdbcTemplate jdbcTemplate) {
+    public LogsService(JdbcTemplate jdbcTemplate, BCryptPasswordEncoder passwordEncoder) {
         this.jdbcTemplate = jdbcTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<LogsDTO> getNos(Long postNo) {
@@ -71,6 +74,11 @@ public class LogsService implements LogsServiceInterface {
 
     @Override
     public void writeComent(LogsComentDTO logsComentDTO) {
+
+        // 비밀번호 해시화
+        String hashedPassword = passwordEncoder.encode(logsComentDTO.getcomentPW());
+        logsComentDTO.setcomentPW(hashedPassword);
+
         String sql = "INSERT INTO coment (postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth) VALUES (?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, logsComentDTO.getPostNo(), logsComentDTO.getcomentContent(),
@@ -96,6 +104,17 @@ public class LogsService implements LogsServiceInterface {
     public void deleteComent(LogsComentDTO logsComentDTO) {
         String sql = "UPDATE coment SET comentContent = '삭제된 댓글입니다', comentNickname = '', comentPW = '', comentDelete = 1 WHERE comentNo = ?;";
         jdbcTemplate.update(sql, logsComentDTO.getcomentNo());
+
+    }
+
+    @Override
+    public List<LogsComentDTO> verify(String comentNo) {
+        String sql = "SELECT comentPW FROM coment WHERE comentNo = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            LogsComentDTO logsComentDTO = new LogsComentDTO();
+            logsComentDTO.setcomentPW(rs.getString("comentPW"));
+            return logsComentDTO;
+        });
     }
 
 }

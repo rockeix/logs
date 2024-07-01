@@ -4,9 +4,12 @@ import logPoject.logs.DTO.LogsDTO;
 import logPoject.logs.DTO.LogsComentDTO;
 import logPoject.logs.Service.LogsService;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +24,12 @@ public class LogsController {
     public PhotoUtil photoUtil;
     @Autowired
     private final LogsService logsService;
+    @Autowired
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public LogsController(LogsService logsService) {
+    public LogsController(LogsService logsService, BCryptPasswordEncoder passwordEncoder) {
         this.logsService = logsService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @RequestMapping("/index2")
@@ -129,6 +135,19 @@ public class LogsController {
             return ResponseEntity.ok().body("Post saved successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error saving post");
+        }
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<?> verify(@RequestBody Map<String, String> request) {
+        String comentNo = request.get("comentNo");
+        String comentPW = request.get("comentPW");
+
+        List<LogsComentDTO> result = logsService.verify(comentNo);
+        if (!result.isEmpty() && passwordEncoder.matches(comentPW, result.get(0).getcomentPW())) {
+            return ResponseEntity.ok(Collections.singletonMap("valid", true));
+        } else {
+            return ResponseEntity.ok(Collections.singletonMap("valid", false));
         }
     }
 
