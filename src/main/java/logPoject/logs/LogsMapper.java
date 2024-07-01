@@ -34,8 +34,8 @@ public interface LogsMapper {
     List<LogsDTO> getPostNamePost();
 
     @Update("UPDATE coment SET comentContent = '삭제된 댓글입니다', comentNickname = '', comentPW = '', comentDelete = 1 WHERE comentNo = #{comentNo}")
-    void deleteComent(int comentNo);
+    void deleteComent(LogsComentDTO logsComentDTO);
 
-    @Select("SELECT comentPW FROM coment WHERE comentNo = #{comentNo}")
+    @Select("SELECT comentPW FROM coment WHERE comentNo = 24")
     List<LogsComentDTO> verify(String comentNo);
 }

@@ -140,7 +140,7 @@ public class LogsController {
 
     @PostMapping("/verify")
     public ResponseEntity<?> verify(@RequestBody Map<String, String> request) {
-        String comentNo = request.get("comentNo");
+        int comentNo = Integer.parseInt(request.get("comentNo"));
         String comentPW = request.get("comentPW");
 
         List<LogsComentDTO> result = logsService.verify(comentNo);

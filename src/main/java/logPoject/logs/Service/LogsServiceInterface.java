@@ -21,5 +21,5 @@ public interface LogsServiceInterface {
 
     void deleteComent(LogsComentDTO logsComentDTO);
 
-    List<LogsComentDTO> verify(String comentNo);
+    List<LogsComentDTO> verify(int comentNo);
 }

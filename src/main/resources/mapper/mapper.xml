@@ -38,13 +38,13 @@
     WHERE comentNo = #{comentNo}
   </select>
 
-  <update id="deleteComent" parameterType="int">
+  <update id="deleteComent" parameterType="logPoject.logs.DTO.LogsComentDTO">
     UPDATE coment
     SET comentContent = '삭제된 댓글입니다',
       comentNickname = '',
       comentPW = '',
       comentDelete = 1
-    WHERE comentNo = #{comentNo};
+    WHERE comentNo = 24;
   </update>
 
 </mapper>
