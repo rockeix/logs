@@ -109,7 +109,7 @@ public class LogsService implements LogsServiceInterface {
 
     @Override
     public List<LogsComentDTO> verify(int comentNo) {
-        String sql = "SELECT comentPW FROM coment WHERE comentNo = 24";
+        String sql = "SELECT comentPW FROM coment WHERE comentNo = 25";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsComentDTO logsComentDTO = new LogsComentDTO();
             logsComentDTO.setcomentPW(rs.getString("comentPW"));

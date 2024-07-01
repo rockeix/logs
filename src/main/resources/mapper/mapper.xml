@@ -44,7 +44,7 @@
       comentNickname = '',
       comentPW = '',
       comentDelete = 1
-    WHERE comentNo = 24;
+    WHERE comentNo = #{comentNo};
   </update>
 
 </mapper>
