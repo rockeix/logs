@@ -13,6 +13,7 @@ public class LogsDTO {
     private String userNickname;
     private String userPW;
     private String postIMG;
+    private String postCreateDate;
 
     // 포스트
     public String getPostNo() {
@@ -61,6 +62,14 @@ public class LogsDTO {
 
     public void setPostIMG(String postIMG) {
         this.postIMG = postIMG;
+    }
+
+    public String getPostCreateDate() {
+        return postCreateDate;
+    }
+
+    public void setPostCreateDate(String postCreateDate) {
+        this.postCreateDate = postCreateDate;
     }
 
 };

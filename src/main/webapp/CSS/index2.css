@@ -31,6 +31,13 @@ html,body {
   padding: 20px;
 }
 
+.createdate {
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+  padding-top: 100px;
+}
+
 .writer {
   position: absolute;
   bottom: 0;
@@ -45,6 +52,7 @@ html,body {
   height: 2px;
   background-color: #c0dde9;
   margin: left;
+  margin-top: 10px;
 }
 
 .thumbnail {

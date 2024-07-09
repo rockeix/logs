@@ -20,36 +20,36 @@ public class LogsService implements LogsServiceInterface {
     }
 
     public List<LogsDTO> getNos(Long postNo) {
-        String sql = "SELECT postNo, postName, postContent, userNickname, postIMG FROM post WHERE postNo = ?";
+        String sql = "SELECT postNo, postName, postContent, userNickname, postCreateDate FROM post WHERE postNo = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsDTO logsDTO = new LogsDTO();
             logsDTO.setPostNo(rs.getString("postNo"));
             logsDTO.setPostName(rs.getString("postName"));
             logsDTO.setPostContent(rs.getString("postContent"));
             logsDTO.setUserNickname(rs.getString("userNickname"));
-            logsDTO.setPostIMG(rs.getString("postIMG"));
+            logsDTO.setPostCreateDate(rs.getString("postCreateDate"));
             return logsDTO;
         }, postNo);
     }
 
     @Override
     public void savePost(LogsDTO logsDTO) {
-        String sql = "INSERT INTO post (postName, postContent, userNickname, userPW, postIMG) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO post (postName, postContent, userNickname, userPW) VALUES (?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, logsDTO.getPostName(), logsDTO.getPostContent(), logsDTO.getUserNickname(),
-                logsDTO.getUserPW(), logsDTO.getPostIMG());
+                logsDTO.getUserPW());
     }
 
     @Override
     public List<LogsDTO> getAllPosts() {
-        String sql = "SELECT postNo, postName, postContent, userNickname, postIMG FROM post";
+        String sql = "SELECT postNo, postName, postContent, userNickname, postCreateDate FROM post";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsDTO logsDTO = new LogsDTO();
             logsDTO.setPostNo(rs.getString("postNo"));
             logsDTO.setPostName(rs.getString("postName"));
             logsDTO.setPostContent(rs.getString("postContent"));
             logsDTO.setUserNickname(rs.getString("userNickname"));
-            logsDTO.setPostIMG(rs.getString("postIMG"));
+            logsDTO.setPostCreateDate(rs.getString("postCreateDate"));
             return logsDTO;
         });
     }
@@ -87,7 +87,7 @@ public class LogsService implements LogsServiceInterface {
     }
 
     public List<LogsDTO> getPoName(String search) {
-        String sql = "SELECT postNo, postName, postContent, userNickname, postIMG FROM post WHERE postName LIKE ?";
+        String sql = "SELECT postNo, postName, postContent, userNickname, postCreateDate FROM post WHERE postName LIKE ?";
         String searchPattern = "%" + search + "%";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsDTO logsDTO = new LogsDTO();
@@ -95,7 +95,7 @@ public class LogsService implements LogsServiceInterface {
             logsDTO.setPostName(rs.getString("postName"));
             logsDTO.setPostContent(rs.getString("postContent"));
             logsDTO.setUserNickname(rs.getString("userNickname"));
-            logsDTO.setPostIMG(rs.getString("postIMG"));
+            logsDTO.setPostCreateDate(rs.getString("postCreateDate"));
             return logsDTO;
         }, searchPattern);
     }
