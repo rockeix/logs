@@ -24,8 +24,6 @@ String content = request.getParameter("content");
     <textarea id="postContent" name="postContent"></textarea><br>
     <label for="userNickname">닉네임:</label><br>
     <input type="text" id="userNickname" name="userNickname"><br>
-    <label for="userPW">패스워드:</label><br>
-    <input type="password" id="userPW" name="userPW"><br>
     <input type="button" value="저장하기" onclick="submitForm()"><br>
     <input type="button" value="게시판 이동" onclick= "index2()"><br>
 </form>
@@ -55,7 +53,6 @@ function submitForm() {
     var postName = $("#postName").val().trim(); //앞뒤로 여백없애기
     var editorData = editor.getData().trim();
     var userNickname = $("#userNickname").val().trim();
-    var userPW = $("#userPW").val().trim();
 
     if (postName === "" || editorData === "" || userNickname === "") { 
         alert("제목, 내용, 닉네임을 모두 입력해주세요.");
@@ -78,7 +75,6 @@ function submitForm() {
         "postName": postName,
         "postContent": updatedEditorData,
         "userNickname": userNickname,
-        "userPW": userPW
     };
 
     var fileNames = getFileNames(images);
