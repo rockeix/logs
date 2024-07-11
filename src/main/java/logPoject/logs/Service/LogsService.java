@@ -42,7 +42,7 @@ public class LogsService implements LogsServiceInterface {
 
     @Override
     public List<LogsDTO> getAllPosts() {
-        String sql = "SELECT postNo, postName, postContent, userNickname, postCreateDate FROM post";
+        String sql = "SELECT postNo, postName, postContent, userNickname, postCreateDate FROM post ORDER BY postNo DESC";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsDTO logsDTO = new LogsDTO();
             logsDTO.setPostNo(rs.getString("postNo"));
@@ -87,7 +87,7 @@ public class LogsService implements LogsServiceInterface {
     }
 
     public List<LogsDTO> getPoName(String search) {
-        String sql = "SELECT postNo, postName, postContent, userNickname, postCreateDate FROM post WHERE postName LIKE ?";
+        String sql = "SELECT postNo, postName, postContent, userNickname, postCreateDate FROM post WHERE postName LIKE ? ORDER BY postNo DESC";
         String searchPattern = "%" + search + "%";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             LogsDTO logsDTO = new LogsDTO();

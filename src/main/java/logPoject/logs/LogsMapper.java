@@ -18,7 +18,7 @@ public interface LogsMapper {
     @Insert("insert into post(postName, postContent, userNickname, userPW, postIMG) values (#{postName}, #{postContent}, #{userNickname}, #{userPW}, #{postIMG})")
     void insertPost(LogsDTO logsDTO);
 
-    @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post")
+    @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post ORDER BY postNo DESC")
     List<LogsDTO> getAllPosts();
 
     @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post where postNo = #{postNo}")
@@ -30,7 +30,7 @@ public interface LogsMapper {
     @Insert("INSERT INTO coment (postNo, comentContent, comentNickname, comentPW, cocomentNo, comentDepth) VALUES (#{postNo}, #{comentContent}, #{comentNickname}, #{comentPW}, #{cocomentNo}, #{comentDepth})")
     void writeComent(LogsComentDTO logsComentDTO);
 
-    @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post where postName like '%${search}%'")
+    @Select("SELECT postNo, postName, postContent, userNickname, postIMG FROM post where postName like '%${search}%' ORDER BY postNo DESC")
     List<LogsDTO> getPostNamePost();
 
     @Update("UPDATE coment SET comentContent = '삭제된 댓글입니다', comentNickname = '', comentPW = '', comentDelete = 1 WHERE comentNo = #{comentNo}")
