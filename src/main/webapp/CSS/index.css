@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+html,body {
+  padding: 0;
+  margin: 0;
+}
+
+.postWrite {
+  float: left;
+  padding: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  margin: 100;
+  width : 80%;
+  height: 80%;
+  background-color: #ffffff;
+  border-width: 12px;
+  border-color: #f8f9fa;
+  border-style: solid;
+  box-shadow: 10px 5px 5px rgb(194, 194, 194);
+  position: relative;
+}
+
+.postWCont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
