@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #f8f9fa;
+}
+
+.card {
+    font-size: 1rem;
+    /* 기본 폰트 크기 */
+    margin-bottom: 10px;
+    /* 카드 간격 */
+}
+
+#postpage {
+    width: 768px;
+    margin-top: 5.6rem;
+    margin-bottom: 5.6rem;
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+}
+
+#comentlist {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+#comentporm {
+    margin-right: auto;
+    border-top: 2px solid #000;
+}
+
+#comentwrite {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+
+textarea {
+    resize: none !important;
+    /* 크기 조절 비활성화 */
+    width: 100% !important;
+    /* 부모 요소의 너비에 맞춤 */
+    height: 100%;
+
+    box-sizing: border-box !important;
+    /* 패딩과 보더를 포함한 너비 계산 */
+}

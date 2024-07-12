@@ -6,26 +6,36 @@
 <head>
     <meta charset="UTF-8">
     <title>포스트 내용</title>
+    <link rel="stylesheet" href="/CSS/index3.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- jQuery 추가 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+<div class="container" id="postpage">
 <div id="postBoard"></div>
 
 <div id="comentlist"></div>
 
-<form id="comentporm">
-    <div id="coment-write">
-        <input type="Nickname" id="comentNickname" name="comentNickname" placeholder="닉네임"><br>
-        <input type="password" id="comentPW" name="comentPW" placeholder="비밀번호"><br>
-        <textarea id="comentContent" name="comentContent"></textarea>
-        <input type="button" value="등록" onclick="submitComment()"><br>
+<div class="container"  id="comentporm">
+    <div class="row" id="comentwrite">
+        <div class="col-9">
+            <textarea class="form-control" id="comentContent" name="comentContent"></textarea><br>
+        </div>
+        <div class="col-3">
+            <input type="Nickname" class="form-control mb-2" id="comentNickname" name="comentNickname" placeholder="닉네임">
+            <input type="password" class="form-control mb-2" id="comentPW" name="comentPW" placeholder="비밀번호">
+            <input type="button" class="btn btn-primary mx-auto d-block" id="subit_btn" value="등록" onclick="submitComment()">
+        </div>
     </div>
-    <input type="button" value="게시판 이동" onclick="index2()">
-    <input type="button" value="삭제" onclick="">
-</form>
-
+</div>
+</div>
+<div class="d-flex justify-content-between align-items-center">
+<input type="button" id="index2_btn" value="목록" onclick="index2()">
+<input type="button" id="index_btn" value="글쓰기" onclick="">
+</div>
 
 
 <script>
@@ -49,10 +59,17 @@ function loadPostContent() {
 
                 response.forEach(function(post) {
                 // 각 포스트를 게시판 형식으로 출력
-                var postHTML = '<div class="postNo" data-id="' + post.postNo + '">';
-                postHTML += '<h2 >' + post.postName + '</h2>';
+                var postHTML = '<div class="card bg-white" data-id="' + post.postNo + '">';
+                postHTML += '<div class="card-header bg-white">';
+                postHTML += '<h2>' + post.postName + '</h2>';
+                postHTML += '</div>';
+                postHTML += '<div class="card-body d-flex justify-content-between align-items-center">';
                 postHTML += '<p>작성자: ' + post.userNickname + '</p>';
+                postHTML += '<p>' + post.postCreateDate + '</p>';
+                postHTML += '</div>';
+                postHTML += '<div class="card-footer bg-white">';
                 postHTML += '<p>' + post.postContent + '</p>';
+                postHTML += '</div>';
                 postHTML += '</div>';
                 
                 $("#postBoard").append(postHTML);
@@ -75,7 +92,7 @@ function getParameterByName(name, url) { // URL에서 특정 이름(name)의 쿼
 }
 
 function showReplyForm(comentNo) {
-    var replyForm = $("#replyForm-" + comentNo);
+    var replyForm = $("#replyForm" + comentNo);
     if (replyForm.css("display") === "none") {
         replyForm.show();
     } else {
@@ -93,23 +110,80 @@ function loadCommentlist() {
         data: { postNo: postNo },
         contentType: "application/json",
         success: function(response) {
-            $("#comentlist").empty(); // 기존 댓글 삭제
+            // 댓글을 트리 구조로 변환
+            var comentsMap = {};
+            var rootComents = [];
+
             response.forEach(function(coment) {
-                var comentHTML = '<div class="postNo" data-id="' + coment.postNo + '">';
-                    comentHTML += '<h2>' + coment.comentNickname + '</h2>';
-                    comentHTML += '<p class="comentContent" onclick="showReplyForm(' + coment.comentNo + ')">' + coment.comentContent + '</p>';
-                    comentHTML += '<p>' + coment.comentCreateDate + '</p>';
-                 
-                 if (coment.comentDelete === "0") {
-                    comentHTML += '<button onclick="showDeletePasswordForm(' + coment.postNo + ', ' + coment.comentNo + ')">삭제</button>';
+                coment.children = [];
+                comentsMap[coment.comentNo] = coment;
+
+                if (coment.comentDepth === "0") {
+                    rootComents.push(coment);
+                } else {
+                    var parentComent = comentsMap[coment.cocomentNo];
+                    if (parentComent) {
+                        parentComent.children.push(coment);
                     }
-                    comentHTML += '<div id="replyForm-' + coment.comentNo + '" style="display:none;">';
-                    comentHTML += '<input type="text" id="replyNickname-' + coment.comentNo + '" placeholder="닉네임">';
-                    comentHTML += '<input type="password" id="replyPW-' + coment.comentNo + '" placeholder="비밀번호">';
-                    comentHTML += '<textarea id="replyContent-' + coment.comentNo + '" placeholder="답글 내용"></textarea>';
-                    comentHTML += '<button onclick="submitReply(' + coment.postNo + ', ' + coment.comentNo + ', ' + (Number(coment.comentDepth) + 1) + ')">답글 제출</button>';
+                }
+            });
+
+            $("#comentlist").empty(); // 기존 댓글 삭제
+
+            // 트리 구조를 바탕으로 HTML 생성
+            function generateComentHTML(coment, comentDepth = 0) {
+                 var marginValue = 20 - (comentDepth * 2); // 깊이에 따라 마진 줄이기 (2px 단위로 줄임)
+                if (marginValue < 5) marginValue = 5; // 최소 마진 값 설정
+                var comentHTML = '<div class="card" data-id="' + coment.postNo + '" style="margin-left: ' + (comentDepth * 20) + 'px; margin-top: ' + marginValue + 'px;">'; // 깊이에 따라 들여쓰기 및 마진 적용
+                comentHTML += '<div class="card-header d-flex justify-content-between align-items-center">';
+                comentHTML += '<h5 class="mb-0">' + coment.comentNickname + '</h5>';
+                comentHTML += '<div class="d-flex justify-content-between align-items-center">';
+                comentHTML += '<p class="mb-0 me-2">' + coment.comentCreateDate + '</p>';
+                if (coment.comentDelete === "0") {
+                    comentHTML += '<button onclick="showDeletePasswordForm(' + coment.postNo + ', ' + coment.comentNo + ')">삭제</button>';  
+                }
+                comentHTML += '</div>';
+                comentHTML += '</div>';
+                comentHTML += '<div class="card-body">';
+
+                // 삭제된 댓글에는 onclick 이벤트를 추가하지 않음
+                if (coment.comentDelete !== "0") {
+                    comentHTML += '<p class="card-text text-muted"><i>삭제된 댓글입니다.</i></p>';
+                } else {
+                    comentHTML += '<p class="card-text" onclick="showReplyForm(' + coment.comentNo + ')">' + coment.comentContent + '</p>';
+                    // 깊이가 12를 초과하면 답글을 달 수 없음을 알리는 메시지 출력
+                if (comentDepth<12) {  
+                    comentHTML += '<div id="replyForm' + coment.comentNo + '" style="display:none;" class="mt-3">';
+                    comentHTML += '<div class="row">';
+                    comentHTML += '<div class="col-9 ">';
+                    comentHTML += '<textarea id="replyContent' + coment.comentNo + '" class="form-control " placeholder="답글 내용"></textarea>';
                     comentHTML += '</div>';
-                     comentHTML += '</div>';
+                    comentHTML += '<div class="col-3">';
+                    comentHTML += '<input type="text" id="replyNickname' + coment.comentNo + '" class="form-control mb-2" placeholder="닉네임">';
+                    comentHTML += '<input type="password" id="replyPW' + coment.comentNo + '" class="form-control mb-2" placeholder="비밀번호">';
+                    comentHTML += '<button class="btn btn-primary mx-auto d-block" onclick="submitReply(' + coment.postNo + ', ' + coment.comentNo + ', ' + (Number(coment.comentDepth) + 1) + ')">답글 제출</button>';
+                    comentHTML += '</div>';
+                    comentHTML += '</div>';
+                    comentHTML += '</div>';
+                }else{
+                    comentHTML += '<p class="text-danger mt-2">더 이상 답글을 달 수 없습니다.</p>';
+                }
+                }
+                comentHTML += '</div>';
+                comentHTML += '</div>';
+
+                // 대댓글이 있으면 재귀적으로 HTML 생성
+                if (coment.children.length > 0) {
+                    coment.children.forEach(function(childComent) {
+                        comentHTML += generateComentHTML(childComent, comentDepth + 1); // 깊이를 증가시키며 재귀 호출
+                    });
+                }
+
+                return comentHTML;
+            }
+
+            rootComents.forEach(function(coment) {
+                var comentHTML = generateComentHTML(coment);
                 $("#comentlist").append(comentHTML);
             });
         },
@@ -120,9 +194,9 @@ function loadCommentlist() {
 }
 
 function submitReply(postNo, comentNo, depth) {
-    var replyContent = $("#replyContent-" + comentNo).val().trim();
-    var replyNickname = $("#replyNickname-" + comentNo).val().trim();
-    var replyPW = $("#replyPW-" + comentNo).val().trim();
+    var replyContent = $("#replyContent" + comentNo).val().trim();
+    var replyNickname = $("#replyNickname" + comentNo).val().trim();
+    var replyPW = $("#replyPW" + comentNo).val().trim();
 
     if (replyContent === "" || replyNickname === "" || replyPW === "") {
         alert("내용, 닉네임을 모두 입력해주세요.");
@@ -196,28 +270,28 @@ function submitComment() {
 }
 
 function showReplyForm(comentNo) {
-    $("#replyForm-" + comentNo).toggle();
+    $("#replyForm" + comentNo).toggle();
 }
 
 function showDeletePasswordForm(postNo, comentNo) {
-    var deleteFormHTML = '<div id="deleteForm-' + comentNo + '" class="deleteForm">';
+    var deleteFormHTML = '<div id="deleteForm' + comentNo + '" class="deleteForm">';
     deleteFormHTML += '<h3>댓글 삭제</h3>';
-    deleteFormHTML += '<input type="password" id="deletePW-' + comentNo + '" placeholder="비밀번호">';
+    deleteFormHTML += '<input type="password" id="deletePW' + comentNo + '" placeholder="비밀번호">';
     deleteFormHTML += '<button onclick="deleteComment(' + postNo + ', ' + comentNo + ')">삭제</button>';
     deleteFormHTML += '<button onclick="hideDeleteForm(' + comentNo + ')">취소</button>';
     deleteFormHTML += '</div>';
 
      // 특정 댓글 요소 내부에 삭제 폼 추가
-    $('#replyForm-' + comentNo).after(deleteFormHTML);
+    $('#replyForm' + comentNo).after(deleteFormHTML);
 }
 
 function hideDeleteForm(comentNo) {
-    $('#deleteForm-' + comentNo).remove();
+    $('#deleteForm' + comentNo).remove();
 }
 
 
 function deleteComment(comentPW,comentNo) {
-    var comentPW = $('#deletePW-' + comentNo).val();
+    var comentPW = $('#deletePW' + comentNo).val();
     var postNo = decodeURIComponent(getParameterByName('postNo'));
 
     if (comentPW === '') {
