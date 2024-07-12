@@ -166,6 +166,8 @@ function loadCommentlist() {
                     comentHTML += '</div>';
                     comentHTML += '</div>';
                 }else{
+                    comentHTML += '<div id="replyForm' + coment.comentNo + '" style="display:none;" class="mt-3">';
+                    comentHTML += '</div>';
                     comentHTML += '<p class="text-danger mt-2">더 이상 답글을 달 수 없습니다.</p>';
                 }
                 }
