@@ -25,11 +25,15 @@
         <a class="navbar-brand ms-auto" href="/logs/search">
             <img src="/IMG/search.png"  width="32" height="32">
         </a>
+        <input class="btn btn-outline-primary" type="button" value="글쓰기" onclick= "Write()"><br>
 
     </div>
 </nav>
  
-<script> 
+<script>
+function Write() {
+    window.location.href = "/Write";
+}
 </script>
 
 </body>

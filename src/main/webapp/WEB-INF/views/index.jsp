@@ -106,6 +106,7 @@ function submitForm() {
                 data: JSON.stringify(formData),
                 success: function(response) {
                     alert("저장성공.");
+                    window.location.href = "/logs/index2";
                 },
                 error: function(xhr, status, error) {
                     alert("저장에 실패했습니다: " + xhr.responseText);
