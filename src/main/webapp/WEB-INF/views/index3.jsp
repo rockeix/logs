@@ -132,7 +132,7 @@ function loadCommentlist() {
 
             // 트리 구조를 바탕으로 HTML 생성
             function generateComentHTML(coment, comentDepth = 0) {
-                 var marginValue = 20 - (comentDepth * 2); // 깊이에 따라 마진 줄이기 (2px 단위로 줄임)
+                var marginValue = 20 - (comentDepth * 2); // 깊이에 따라 마진 줄이기 (2px 단위로 줄임)
                 if (marginValue < 5) marginValue = 5; // 최소 마진 값 설정
                 var comentHTML = '<div class="card" data-id="' + coment.postNo + '" style="margin-left: ' + (comentDepth * 20) + 'px; margin-top: ' + marginValue + 'px;">'; // 깊이에 따라 들여쓰기 및 마진 적용
                 comentHTML += '<div class="card-header d-flex justify-content-between align-items-center">';
@@ -277,14 +277,16 @@ function showReplyForm(comentNo) {
 
 function showDeletePasswordForm(postNo, comentNo) {
     var deleteFormHTML = '<div id="deleteForm' + comentNo + '" class="deleteForm">';
-    deleteFormHTML += '<h3>댓글 삭제</h3>';
-    deleteFormHTML += '<input type="password" id="deletePW' + comentNo + '" placeholder="비밀번호">';
-    deleteFormHTML += '<button onclick="deleteComment(' + postNo + ', ' + comentNo + ')">삭제</button>';
-    deleteFormHTML += '<button onclick="hideDeleteForm(' + comentNo + ')">취소</button>';
-    deleteFormHTML += '</div>';
+    if ($('#deleteForm' + comentNo).length === 0) {
+        deleteFormHTML += '<h3>댓글 삭제</h3>';
+        deleteFormHTML += '<input type="password" id="deletePW' + comentNo + '" placeholder="비밀번호">';
+        deleteFormHTML += '<button onclick="deleteComment(' + postNo + ', ' + comentNo + ')">삭제</button>';
+        deleteFormHTML += '<button onclick="hideDeleteForm(' + comentNo + ')">취소</button>';
+        deleteFormHTML += '</div>';
 
-     // 특정 댓글 요소 내부에 삭제 폼 추가
-    $('#replyForm' + comentNo).after(deleteFormHTML);
+            // 특정 댓글 요소 내부에 삭제 폼 추가
+        $('#replyForm' + comentNo).after(deleteFormHTML);
+    }
 }
 
 function hideDeleteForm(comentNo) {
